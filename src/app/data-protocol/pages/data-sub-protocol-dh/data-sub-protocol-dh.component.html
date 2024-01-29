@@ -1,0 +1,499 @@
+<div class="row">
+    <div class="col-md-12">
+      <h1 i18n="Add Data Handler header|Add Data Handler@@addDataHandler" class="page-header" *ngIf="dataSubProtocolDHFormAdd">
+        Add Data Handler
+      </h1>
+      <h1 i18n="Edit Data Handler header|Edit Data Handler@@editDataHandler" class="page-header" *ngIf="dataSubProtocolDHFormViewEdit">
+        Edit Data Handler
+      </h1>
+      <h1 i18n="Data Handler Preview header|Data Handler Preview@@dataHandlerPreview" class="page-header" *ngIf="dataSubProtocolDHReadModeView">
+        Data Handler - Preview
+      </h1>
+      <h1 i18n="View Data Handler header|View Data Handler@@viewDataHandler" class="page-header" *ngIf="dataSubProtocolDHViewMode">
+        View Data Handler
+      </h1>
+    </div>
+  </div>
+
+  <div class="row margin_0px">
+    <div class="col-md-12 padding_0px rowBox">
+      <div class="padding_Form">
+        <!-- Gateway IO DH form view starts here  -->
+        <form [formGroup]="dataSubProtocolDHForm" novalidate (ngSubmit)="createGatewayIODataHandler()"
+          *ngIf="dataSubProtocolDHFormView">
+          <div class="form-group-custom1">
+            <legend i18n="Data Handler Information header|Data Handler Information@@dataHandlerInformation" class="m-b-15">Data Handler Information</legend>
+            <div class="formBodyCustom1" id="templateDetail">
+              <div class="m-form__group row">
+                <div class="col-lg-6">
+                  <label i18n="Data Protocol|Data Protocol@@dataProtocol" class="">Data Protocol</label>
+                  <div class="form-group">
+                    <input type="text" id="name" class="form-control m-input" [readonly]="true" value={{templateName}}>
+                  </div>
+                </div>
+
+                <div class="col-lg-6">
+                  <label i18n="Communication|Communication@@communication" class="">Communication</label>
+                  <div class="form-group">
+                    <input type="text" id="name" class="form-control m-input" [readonly]="true" value={{communication}}>
+                  </div>
+                </div>
+              </div>
+              <div class="path"></div>
+              <div class="m-form__group row">
+                <div class="col-lg-6">
+                  <label i18n="Name|Name@@name" class="">Name<span class="text-danger">*</span></label>
+                  <div class="form-group">
+                    <div [ngClass]="{'has-error': ((dataSubProtocolDHForm.get('name').touched ||
+                    dataSubProtocolDHForm.get('name').dirty) &&
+                    dataSubProtocolDHForm.get('name').errors)}">
+                      <input (keyup)="onKey($event)" type="text" id="templateName" formControlName="name" class="form-control m-input"
+                        i18n-placeholder="Name placeholder|Enter Name@@dataHandlerName.placeholder" placeholder="Enter Name">
+                      <span class="help-block" *ngIf="((dataSubProtocolDHForm.get('name').touched ||
+                      dataSubProtocolDHForm.get('name').dirty) &&
+                      dataSubProtocolDHForm.get('name').errors)">
+                        <span i18n="Message|Please enter Gateway IO DataHandler Name@@gatewayIODataHandlerName.message" *ngIf="dataSubProtocolDHForm.get('name').errors.required">
+                          Please enter Gateway IO DataHandler Name
+                        </span>
+                        <span i18n="Message|Please enter valid characters@@gatewayIODataHandlerName.message3" *ngIf="dataSubProtocolDHForm.get('name').errors.pattern">
+                          Please enter valid characters
+                        </span>
+                      </span>
+                    </div>
+                  </div>
+
+                  <label i18n="DH Code|DH Code@@dHCode" class="">DH Code<span class="text-danger">*</span></label>
+                  <div class="form-group">
+                    <div [ngClass]="{'has-error': ((dataSubProtocolDHForm.get('dhCode').touched ||
+                    dataSubProtocolDHForm.get('dhCode').dirty) &&
+                    dataSubProtocolDHForm.get('dhCode').errors)}">
+                      <input type="text" id="nodeIdentifier" formControlName="dhCode" class="form-control m-input"
+                        i18n-placeholder="DH Code placeholder|Enter DH Code@@dHCode.placeholder" placeholder="Enter DH Code">
+                      <span class="help-block" *ngIf="((dataSubProtocolDHForm.get('dhCode').touched ||
+                      dataSubProtocolDHForm.get('dhCode').dirty) &&
+                      dataSubProtocolDHForm.get('dhCode').errors)">
+                        <span i18n="Message|Please enter DH Code@@dHCode.message" *ngIf="dataSubProtocolDHForm.get('dhCode').errors.required">
+                          Please enter DH Code
+                        </span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-lg-6">
+                  <label i18n="Description|Description@@description" class="">Description</label>
+                  <div class="form-group">
+                    <textarea type="text" id="description" formControlName="description" class="form-control m-input textAreaHeight"
+                     i18n-placeholder="Description placeholder|Enter Description@@description.placeholder" placeholder="Enter Description" ></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <div class="m-form__group row">
+                <div class="col-lg-6">
+                  <label i18n="Operation Mode|Operation Mode@@operationMode" class="">Operation Mode<span class="text-danger">*</span></label>
+                  <div class="form-group">
+                    <div [ngClass]="{'has-error': ((dataSubProtocolDHForm.get('operatioMode').touched ||
+                    dataSubProtocolDHForm.get('operatioMode').dirty) &&
+                    dataSubProtocolDHForm.get('operatioMode').errors)}">
+                      <select id="operatioMode" formControlName="operatioMode" class="form-control m-input" required>
+                        <option i18n="Option|Select@@select" [value]="null">--Select--</option>
+                        <option i18n="Option|Read@@read" value="R">Read</option>
+                        <option i18n="Option|Write@@write" value="W">Write</option>
+                      </select>
+                      <span class="help-block" *ngIf="((dataSubProtocolDHForm.get('operatioMode').touched ||
+                      dataSubProtocolDHForm.get('operatioMode').dirty) &&
+                      dataSubProtocolDHForm.get('operatioMode').errors)">
+                        <span i18n="Message|Please select Operation Mode@@operationMode.message" *ngIf="dataSubProtocolDHForm.get('operatioMode').errors.required">
+                          Please select Operation Mode
+                        </span>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <div class="form-group">
+                        <mat-checkbox formControlName="isStartValidatorCheckEnabled"
+                          class="example-margin commProtocolsClass" [value]="true">
+                          Enable Start Validator Check
+                        </mat-checkbox>
+                      </div>
+                    </div>
+                    <div class="col-lg-6">
+                      <div class="form-group">
+                        <mat-checkbox formControlName="isEndValidatorCheckEnabled" class="example-margin commProtocolsClass"
+                          [value]="true">
+                          Enable End Validator Check
+                        </mat-checkbox>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <div class="form-group">
+                        <mat-checkbox formControlName="isErrorCheckEnabled" class="example-margin commProtocolsClass"
+                          [value]="true">
+                          Enable Error Check
+                        </mat-checkbox>
+                      </div>
+                    </div>
+                    <div class="col-lg-6">
+                      <div class="form-group">
+                        <mat-checkbox formControlName="isLengthCheckEnabled" class="example-margin commProtocolsClass"
+                          [value]="true">
+                          Enable Length Check
+                        </mat-checkbox>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="m-form__group row">
+                <div class="col-lg-6">
+                  <label i18n="Response Required|Response Required@@responseRequired" class="">Response Required</label>
+                  &nbsp;&nbsp;&nbsp;&nbsp;
+                  <span class="form-group">
+                   <!--  <input type="checkbox" formControlName="sendResponse">
+ -->
+                    <mat-checkbox formControlName="sendResponse"></mat-checkbox>
+                  </span>
+                  <div class="form-group"></div>
+                </div>
+                <div class="col-lg-6"></div>
+              </div>
+
+              <div class="m-form__group row">
+                <div class="col-lg-6">
+                  <label i18n="Response Data Format|Response Data Format@@responseDataFormat" class="">Response Data Format</label>
+                  <div class="form-group">
+                    <ejs-dropdownlist id='ddlelement' #ddlelement class="form-control p-0" [value]='responseFormatId'
+                    name="responseFormatId" formControlName="responseFormatId" [dataSource]='dataProtocolFormats'
+                    [placeholder]='dataProtocolFormatsWaterMark' [fields]='dataProtocolFormatsFields' [popupHeight]='height'
+                    [sortOrder]="sortDropDown" (filtering)='onFilteringDataProtocolFormats($event)'
+                    [filterBarPlaceholder]="filterPlaceholder" [allowFiltering]='true'
+                    (change)='dataProtocolFormatsOnChange($event)' [locale]='locale'></ejs-dropdownlist>
+                    <!-- <select id="responseDataFormat" formControlName="responseFormatId" class="form-control m-input">
+                      <option i18n="Option|Select@@select" [ngValue]="null">--Select--</option>
+                      <option *ngFor="let responseDataFormat of dataProtocolFormats" [ngValue]="responseDataFormat.id">
+                        {{responseDataFormat.name}}
+                    </select> -->
+                  </div>
+                </div>
+
+                <div class="col-lg-6">
+                  <label i18n="Response Tag Seperator|Response Tag Seperator@@responseTagSeperator" class="">Response Tag Seperator</label>
+                  <div class="form-group">
+                    <input type="text" id="responseTagSeperator" formControlName="responseTagSeperator"
+                      class="form-control m-input" i18n-placeholder="Response Tag Seperator placeholder|Enter Response Tag Seperator@@responseTagSeperator.placeholder"
+                      placeholder="Enter Response Tag Seperator">
+                  </div>
+                </div>
+              </div>
+
+              <div class="m-form__group row">
+                <div class="col-lg-6" style="padding-left: 10px; padding-right: 15px;">
+                  <label i18n="Status|Status@@status">Status</label>
+                  <div class="form-group">
+                    <mat-radio-group formControlName="status">
+                      <mat-radio-button value="Active" i18n="Radio button|Active@@active" style="margin-right: 20px;" id="templateStatusA">
+                        Active
+                      </mat-radio-button>
+                      <mat-radio-button id="templateStatusI" value="In_Active" i18n="Radio button|InActive@@inActive">In-Active
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="path finalLine"></div>
+          <div class="row" style="text-align: right;padding: 23px 0;">
+            <div class="col-md-12">
+                <button type="button" id="cancelTemplate" class="btn btn-default text-center cancelActionButton"
+                  (click)="cancelGatewayIODHForm($event)" i18n="Cancel button|Cancel@@cancel"> Cancel
+                </button>
+              &nbsp;
+              <button type="button" id="resetTemplate" class="btn btn-secondary text-center resetActionButton"
+                [disabled]="!dataSubProtocolDHForm.dirty && dataSubProtocolDHForm.pristine" (click)="resetGatewayTemplateForm()"
+                i18n="Reset button|Reset@@reset"> Reset
+              </button>
+              &nbsp;
+              <span i18n-matTooltip="Tooltip validation|Fill the mandatory fields@@fillTheMandatoryFields" matTooltip="Please fill the mandatory fields" [matTooltipDisabled]='dataSubProtocolDHForm.valid'>
+                <button i18n="Review&Save button|Review&Save@@review&Save" class="btn btn-primary text-center reviewAndSaveActionButton" type="submit"
+                  [disabled]="!dataSubProtocolDHForm.valid">
+                  Review & Save</button>
+              </span>
+            </div>
+          </div>
+        </form>
+        <!-- Gateway IO DH form view ends here  -->
+
+        <!-- Gateway IO DH form read mode view starts here  -->
+        <div *ngIf="dataSubProtocolDHReadModeView" class="formReadMode">
+          <div class="form-group-custom1">
+            <legend i18n="Data Handler Information header|Data Handler Information@@gatewayIODataHandlerInformation" class="m-b-15">Data Handler Information</legend>
+            <div class="form-row">
+              <a (click)="backButton('iodhDetail')" class="edit_section">
+                <img src="/assets/img/action/edit.png" alt="edit io dh detail"
+                i18n-matTooltip="Image Tooltip|Click to edit Data Handler Detail@@clickToEditDataHandlerDetail"  matTooltip="Click to edit Data Handler Detail">
+              </a>
+              <div class="form-group col-sm-6 col-md-4">
+                <label i18n="Name|Name@@name" class="">Name</label>
+                <p>
+                  {{dataSubProtocolDH.name | hyphen}}
+                </p>
+              </div>
+              <div class="form-group col-sm-6 col-md-4">
+                <label i18n="DH Code|DH Code@@dHCode" class="">DH Code</label>
+                <p>
+                  {{dataSubProtocolDH.dhCode | hyphen}}
+                </p>
+              </div>
+              <div class="form-group col-sm-6 col-md-4">
+                <label i18n="Description|Description@@description" class="">Description</label>
+                <p>
+                  {{dataSubProtocolDH.description | hyphen}}
+                </p>
+              </div>
+              <div class="form-group col-sm-6 col-md-4">
+                <label i18n="Operation Mode|Operation Mode@@operationMode" class="">Operation Mode</label>
+                <p>
+                  <span *ngIf='dataSubProtocolDH.operatioMode==="R"' i18n="Option|Read@@read">Read</span>
+                  <span *ngIf='dataSubProtocolDH.operatioMode==="W"' i18n="Option|Write@@write">Write</span>
+                </p>
+              </div>
+              <div class="form-group col-sm-6 col-md-4">
+                <label i18n="Enable Start Validator Check|Enable Start Validator Check@@startValidatorCheck"
+                  class="">Enable Start Validator Check</label>
+                <span *ngIf="dataSubProtocolDH.isStartValidatorCheckEnabled else startValidator">
+                  <p>
+                    Yes
+                  </p>
+                </span>
+                <ng-template #startValidator>
+                  <p>No</p>
+                </ng-template>
+              </div>
+              <div class="form-group col-sm-6 col-md-4">
+                <label i18n="Enable End Validator Check|Enable End Validator Check@@endValidatorCheck" class="">Enable End
+                  Validator Check</label>
+                <span *ngIf="dataSubProtocolDH.isEndValidatorCheckEnabled else endValidator">
+                  <p>
+                    Yes
+                  </p>
+                </span>
+                <ng-template #endValidator>
+                  <p>No</p>
+                </ng-template>
+              </div>
+              <div class="form-group col-sm-6 col-md-4">
+                <label i18n="Enable Error Check|Enable Error Check@@errorCheck" class="">Enable Error
+                  Check</label>
+                <span *ngIf="dataSubProtocolDH.isErrorCheckEnabled else errorCheck">
+                  <p>
+                    Yes
+                  </p>
+                </span>
+                <ng-template #errorCheck>
+                  <p>No</p>
+                </ng-template>
+              </div>
+              <div class="form-group col-sm-6 col-md-4">
+                <label i18n="Enable Length Check|Enable Length Check@@lengthCheck" class="">Enable Length
+                  Check</label>
+                <span *ngIf="dataSubProtocolDH.isLengthCheckEnabled else lengthCheck">
+                  <p>
+                    Yes
+                  </p>
+                </span>
+                <ng-template #lengthCheck>
+                  <p>No</p>
+                </ng-template>
+              </div>
+              <div class="form-group col-sm-6 col-md-4">
+                <label i18n="Response Required|Response Required@@responseRequired" class="">Response Required</label>
+                <p>
+                  <span *ngIf='dataSubProtocolDH.sendResponse===true' i18n="Yes|Yes@@yes">Yes</span>
+                  <span *ngIf='dataSubProtocolDH.sendResponse===false' i18n="No|No@@no">No</span>
+                </p>
+              </div>
+              <div class="form-group col-sm-6 col-md-4">
+                <label i18n="Response Data Format|Response Data Format@@responseDataFormat" class="">Response Data Format</label>
+                <p *ngIf='dataSubProtocolDH.responseFormatId===null else dataFormate'>
+                  {{dataSubProtocolDH.responseFormatId | hyphen}}
+                </p>
+                <ng-template #dataFormate>
+                  <p *ngFor='let dataProtocolFormat of dataProtocolFormats'>
+                    <span *ngIf='dataProtocolFormat.id===parseInt(dataSubProtocolDH.responseFormatId)'>
+                      {{dataProtocolFormat.name}}
+                    </span>
+                  </p>
+                </ng-template>
+              </div>
+              <div class="form-group col-sm-6 col-md-4">
+                <label i18n="Response Tag Seperator|Response Tag Seperator@@responseTagSeperator" class="">Response Tag Seperator</label>
+                <p>
+                  {{dataSubProtocolDH.responseTagSeperator | hyphen}}
+                </p>
+              </div>
+              <div class="path"></div>
+              <div class="form-group col-sm-6 col-md-4">
+                <label i18n="Status|Status@@status" class="">Status</label>
+                <p *ngIf="dataSubProtocolDH.status == 'I'">
+                  In-Active
+                </p>
+                <p *ngIf="dataSubProtocolDH.status == 'A'">
+                  Active
+                </p>
+                <p *ngIf="dataSubProtocolDH.status != 'A' && dataSubProtocolDH.status != 'I'">
+                  {{dataSubProtocolDH.status}}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="path finalLine"></div>
+          <div class="row" style="text-align: right;padding: 23px 0;">
+            <div class="col-md-12">
+              <button type="button" class="btn btn-default text-center backActionButton" (click)="backButton($event)" i18n="Back button|Back@@back"> Back
+              </button>
+              &nbsp;
+              <button i18n="Save button|Save@@save" class="btn btn-primary text-center saveActionButton" type="submit"
+                (click)="createOrUpdateGatewayIODataHandler()">
+                Save</button>
+            </div>
+          </div>
+        </div>
+        <!-- Gateway IO DH form read mode view ends here  -->
+
+        <!-- View of IO Data Handler starts here... -->
+        <div *ngIf="dataSubProtocolDHViewMode" class="formReadMode">
+          <div class="form-group-custom1">
+            <legend i18n="Data Handler Information header|Data Handler Information@@gatewayIODataHandlerInformation" class="m-b-15">Data Handler Information</legend>
+            <div class="form-row">
+              <div class="form-group col-sm-6 col-md-4">
+                <label i18n="Name|Name@@name" class="">Name</label>
+                <p>
+                  {{dataSubProtocolDH.name}}
+                </p>
+              </div>
+              <div class="form-group col-sm-6 col-md-4">
+                <label i18n="DH Code|DH Code@@dHCode" class="">DH Code</label>
+                <p>
+                  {{dataSubProtocolDH.dhCode | hyphen}}
+                </p>
+              </div>
+              <div class="form-group col-sm-6 col-md-4">
+                <label i18n="Description|Description@@description" class="">Description</label>
+                <p>
+                  {{dataSubProtocolDH.description | hyphen}}
+                </p>
+              </div>
+              <div class="form-group col-sm-6 col-md-4">
+                <label i18n="Operation Mode|Operation Mode@@operationMode" class="">Operation Mode</label>
+                <p>
+                  <span *ngIf='dataSubProtocolDH.operatioMode==="R"' i18n="Option|Read@@read">Read</span>
+                  <span *ngIf='dataSubProtocolDH.operatioMode==="W"' i18n="Option|Write@@write">Write</span>
+                </p>
+              </div>
+              <div class="form-group col-sm-6 col-md-4">
+                <label i18n="Enable Start Validator Check|Enable Start Validator Check@@startValidatorCheck"
+                  class="">Enable Start Validator Check</label>
+                <span *ngIf="dataSubProtocolDH.isStartValidatorCheckEnabled else startValidator">
+                  <p>
+                    Yes
+                  </p>
+                </span>
+                <ng-template #startValidator>
+                  <p>No</p>
+                </ng-template>
+              </div>
+              <div class="form-group col-sm-6 col-md-4">
+                <label i18n="Enable End Validator Check|Enable End Validator Check@@endValidatorCheck" class="">Enable End
+                  Validator Check</label>
+                <span *ngIf="dataSubProtocolDH.isEndValidatorCheckEnabled else endValidator">
+                  <p>
+                    Yes
+                  </p>
+                </span>
+                <ng-template #endValidator>
+                  <p>No</p>
+                </ng-template>
+              </div>
+              <div class="form-group col-sm-6 col-md-4">
+                <label i18n="Enable Error Check|Enable Error Check@@errorCheck" class="">Enable Error
+                  Check</label>
+                <span *ngIf="dataSubProtocolDH.isErrorCheckEnabled else errorCheck">
+                  <p>
+                    Yes
+                  </p>
+                </span>
+                <ng-template #errorCheck>
+                  <p>No</p>
+                </ng-template>
+              </div>
+              <div class="form-group col-sm-6 col-md-4">
+                <label i18n="Enable Length Check|Enable Length Check@@lengthCheck" class="">Enable Length
+                  Check</label>
+                <span *ngIf="dataSubProtocolDH.isLengthCheckEnabled else lengthCheck">
+                  <p>
+                    Yes
+                  </p>
+                </span>
+                <ng-template #lengthCheck>
+                  <p>No</p>
+                </ng-template>
+              </div>
+              <div class="form-group col-sm-6 col-md-4">
+                <label i18n="Response Required|Response Required@@responseRequired" class="">Response Required</label>
+                <p>
+                  <span *ngIf='dataSubProtocolDH.sendResponse===true' i18n="Yes|Yes@@yes">Yes</span>
+                  <span *ngIf='dataSubProtocolDH.sendResponse===false' i18n="No|No@@no">No</span>
+                </p>
+              </div>
+              <div class="form-group col-sm-6 col-md-4">
+                <label i18n="Response Data Format|Response Data Format@@responseDataFormat" class="">Response Data Format</label>
+                <p *ngIf="dataSubProtocolDH.responseFormat !== null">
+                  {{dataSubProtocolDH.responseFormat.name | hyphen}}
+                </p>
+                <p *ngIf="dataSubProtocolDH.responseFormat == null">
+                  {{dataSubProtocolDH?.responseFormat | hyphen}}
+                </p>
+              </div>
+              <div class="form-group col-sm-6 col-md-4">
+                <label i18n="Response Tag Seperator|Response Tag Seperator@@responseTagSeperator" class="">Response Tag Seperator</label>
+                <p>
+                  {{dataSubProtocolDH.responseTagSeperator | hyphen}}
+                </p>
+              </div>
+              <div class="path"></div>
+              <div class="form-group col-sm-6 col-md-4">
+                <label i18n="Status|Status@@status" class="">Status</label>
+
+                <p>
+                  {{dataSubProtocolDH.status}}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="path finalLine"></div>
+          <div class="row" style="    text-align: right;padding: 23px 0;">
+            <div class="col-md-12">
+              <button type="button" class="btn btn-default text-center backActionButton" (click)="cancelGatewayIODHView()" i18n="Back button|Back@@back">
+                Back
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- View of IO Data Handler ends here... -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Loader image -->
+  <div *ngIf="showLoaderImage" class="col-lg-12 loaderImageStyle" style="margin-left:0%; margin-top:0%;margin-bottom:0%;" align="center">
+    <img src="/assets/img/dashboard/ProgressLoader.gif" height="auto" width="50%" alt="Loading........">
+  </div>
+  <!-- Global modal notification component selector  for deletion and after deletetion success, success with failed-->
+  <app-modal-notification (modelNotificationWarning)="formResetConfirm()" (modelNotificationSuccess)="redirectTo()"></app-modal-notification>

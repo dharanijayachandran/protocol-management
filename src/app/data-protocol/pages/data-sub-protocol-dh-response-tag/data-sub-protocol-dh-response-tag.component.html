@@ -1,0 +1,399 @@
+<div class="row">
+  <div class="col-md-12">
+    <h1
+      i18n="Manage Data Handler Response Tags header|Manage Data Handler Response Tags@@manageDataHandlerResponse Tags"
+      class="page-header">
+      Manage Data Handler Response Tags
+    </h1>
+  </div>
+</div>
+
+<div class="row margin_0px">
+  <div class="col-md-12 padding_0px rowBox">
+    <div class="padding_Form">
+      <!-- Gateway IO Dh Tag form view starts here  -->
+      <form [formGroup]="dataSubProtocolDHResponseTagForm" novalidate (ngSubmit)="previewFormData()"
+        *ngIf="IODHTagForm">
+        <div class="form-group-custom1">
+          <div class="formBodyCustom1" id="">
+
+            <div class="m-form__group row">
+              <div class="col-lg-6">
+                <label i18n="Data Protocol|Data Protocol@@dataProtocol" class="">Data Protocol</label>
+                <div class="form-group">
+                  <input type="text" [readOnly]="true" id="templateName" formControlName="templateName"
+                    class="form-control m-input"
+                    i18n-placeholder="Data Protocol Name placeholder|Data Protocol Name@@dataProtocol.placeholder"
+                    placeholder="Template Name">
+                </div>
+                <label i18n="Data Handler|Data Handler@@dataHandler" class="">Data Handler</label>
+                <div class="form-group">
+                  <input type="text" [readOnly]="true" id="name" formControlName="name" class="form-control m-input"
+                    i18n-placeholder="Data Handler Format placeholder|Data Handler Format@@dataHandler.placeholder"
+                    placeholder="Data Handler Format">
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <label i18n="Communication|Communication@@communication">Communication</label>
+                <div class="form-group">
+                  <input type="text" [readOnly]="true" formControlName="communication" class="form-control m-input"
+                    i18n-placeholder="Communication placeholder|Communication@@communication.placeholder"
+                    placeholder="Communication">
+                </div>
+                <label i18n="Operation Mode|Operation Mode@@operationMode">Operation Mode</label>
+                <div class="form-group">
+                  <input type="text" [readOnly]="true" formControlName="operationMode" class="form-control m-input"
+                    i18n-placeholder="@@operationMode.placeholder" placeholder="Tag Seperator">
+                </div>
+              </div>
+              <div class="col-lg-6"></div>
+            </div>
+            <div class="m-form__group row">
+              <div class="col-lg-6">
+                <label i18n="Tag(s) Display|Tag(s) Display@@tagsDisplay">Tag(s) Display</label>
+                <div class="form-group">
+                  <mat-radio-group aria-label="Select an option" formControlName="displayIOTag">
+                    <mat-radio-button i18n="Radio button|All@@all" value="All" style="margin-right: 20px;"
+                      (change)="getGatewayIODHByIODHId()">
+                      All gateway IO tag(s)
+                    </mat-radio-button>
+                    <mat-radio-button i18n="Radio button|Assigned@@assigned" value="Assigned"
+                      (change)="aasignedGatewayIODHTags()">
+                      Configured in data handler
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+              </div>
+            </div>
+
+
+            <div>
+              <app-panel-user class="panel-header"
+                i18n-name="Panel header|Data Handler Configuration@@dataHandlerConfiguration"
+                name="Data Handler Tag(s) Configuration" #panelHeader>
+
+              </app-panel-user>
+              <div class="position-relative">
+                <div  appScrollbarDirective
+                  [ngClass]="{'firstLeveltabTable ps position-relative': dataSource && dataSource.data.length}">
+                  <table mat-table [dataSource]="dataSource" class="table table-striped table-bordered dataSubProtocol"
+                    formArrayName="dataSubProtocolDHResponseTags" >
+
+                    <!-- Row definitions -->
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+                    <tr mat-row *matRowDef="let element; let i = index; columns: displayedColumns;">
+                    </tr>
+
+                    <!-- <ng-container matColumnDef="sNo">
+                      <th i18n="@@SNo" mat-header-cell *matHeaderCellDef>S.No.</th>
+                      <td mat-cell *matCellDef="let element; let i = index;">
+                        {{ (i+1)}}</td>
+                    </ng-container> -->
+                    <ng-container matColumnDef="select">
+                      <th i18n="Table|Select@@select" mat-header-cell *matHeaderCellDef>Check Box</th>
+                      <td mat-cell *matCellDef="let element;let i = index; " [formGroupName]="i">
+                        <mat-checkbox [checked]='isAssign' formControlName="isAssign"
+                          (change)="tagSelected(saveDataSubProtocolDHTags[i].dataProtocolTag.id,$event)"
+                          i18n-matTooltip="enable/Disable matTooltip|Click to enable/Disable@@clickToEnable/Disable"
+                          matTooltip="Click to Enable/Disable">
+                        </mat-checkbox>
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="name">
+                      <th i18n="Table|Name@@name" mat-header-cell *matHeaderCellDef>Tag Name</th>
+                      <td mat-cell *matCellDef="let element;let i = index; " [formGroupName]="i">
+                        <input type="hidden" formControlName="dataProtocolTagId"
+                          [ngModel]="saveDataSubProtocolDHTags[i].dataProtocolTag.id" />
+                        <span>{{saveDataSubProtocolDHTags[i].dataProtocolTag.name}}</span>
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="configuration">
+                      <th i18n="Table|Data Handler Tag Configuration Details@@dataHandlerTagConfigurationDetails"
+                        mat-header-cell *matHeaderCellDef>Tag Configuration Details</th>
+                      <td mat-cell *matCellDef="let element;let i = index; " [formGroupName]="i">
+                        <div class="formBodyCustom1" id="">
+                          <div class="m-form__group row">
+                            <div class="col-lg-6">
+                              <label i18n="Parent Tag|Parent Tag@@parentTag">Parent Tag</label>
+                              <div class="form-group">
+                                <select formControlName="parentDataSubProtocolDHResponseTagId"
+                                  class=" form-control m-input">
+                                  <option i18n="Option|Select@@select" value="null">--Select--
+                                  </option>
+                                  <ng-container
+                                    *ngFor="let gatewayCommIOTagParent of patchDataProtocolIODHResponseTags|orderByPipe:'tagName'">
+                                    <option
+                                      *ngIf="parseInt(gatewayCommIOTagParent.dataProtocolTag.id) != parseInt(saveDataSubProtocolDHTags[i].dataProtocolTag.id)"
+                                      [ngValue]="gatewayCommIOTagParent.id">
+                                      {{gatewayCommIOTagParent.tagName}}
+                                    </option>
+                                  </ng-container>
+
+                                </select>
+                              </div>
+                              <label i18n="Length|Length@@length">Length</label>
+                              <div class="form-group">
+
+                                <input type="text" formControlName="tagLength" class="form-control m-input"
+                                  i18n-placeholder="Length placeholder|Enter Length@@length.placeholder"
+                                  placeholder="Enter Length">
+
+
+                              </div>
+                            </div>
+                            <div class="col-lg-6">
+                              <label i18n="Index|Index@@index">Index</label>
+                              <div class="form-group">
+                                <input type="text" formControlName="tagIndex" class="form-control m-input"
+                                  i18n-placeholder="Index placeholder|Index@@index.placeholder" placeholder="Index">
+
+                              </div>
+                              <label i18n="Length Unit|Length Unit@@lengthUnit">Length Unit</label>
+                              <div class="form-group">
+                                <select formControlName="tagLengthUnit" class=" form-control m-input">
+                                  <option i18n="Option|Select@@select" value="null">--Select--
+                                  </option>
+                                  <option *ngFor="let tagLengthUnit of tagLengthUnits | orderByPipe:'value'" [value]="tagLengthUnit.id">
+                                    {{tagLengthUnit.value}}</option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="m-form__group row">
+                            <div class="col-lg-6">
+                              <label i18n="Tag Key Name|Tag Key Name@@tagKeyName">Tag Key Name</label>
+                              <div class="form-group">
+                                <input type="text" formControlName="tagKeyName" class="form-control m-input"
+                                  i18n-placeholder="Tag Key Name placeholder|Enter Tag Key Name@@tagKeyName.placeholder"
+                                  placeholder="Enter Tag Key Name">
+                              </div>
+                              <label i18n="Tag Seperator|Tag Seperator@@tagSeperator">Tag Seperator</label>
+                              <div class="form-group">
+                                <input type="text" formControlName="dataProtocolTagSeparator"
+                                  class="form-control m-input"
+                                  i18n-placeholder="Tag Seperator placeholder|Tag Seperator@@tagSeperator.placeholder"
+                                  placeholder="Tag Seperator">
+                              </div>
+                            </div>
+                            <div class="col-lg-6">
+                              <label i18n="Data Format|Data Format@@dataFormat">Data Format</label>
+                              <div class="form-group">
+                                <select formControlName="dataSubProtocolDHResponseTagFormatId"
+                                  class=" form-control m-input">
+                                  <option i18n="Option|Select@@select" value="null">--Select--
+                                  </option>
+                                  <option *ngFor="let dataFormat of dataFormats | orderByPipe:'name'" [value]="dataFormat.id">
+                                    {{dataFormat.name}}
+                                  </option>
+                                </select>
+                              </div>
+                              <label i18n="Participate In|Participate In@@participateIn">Participate In</label>
+                              <div class="row">
+                                <div class="col-lg-6">
+                                  <div class="form-group">
+                                    <mat-checkbox [checked]='false' formControlName="isParticipantInLength"
+                                      matTooltip="Click to enable/Disable" i18n="Length|Length@@length">Length
+                                    </mat-checkbox>
+                                  </div>
+                                </div>
+                                <div class="col-lg-6">
+                                  <div class="form-group">
+                                    <mat-checkbox [checked]='false' formControlName="isParticipantInErrorCheck"
+                                      matTooltip="Click to enable/Disable" i18n="Error Check|Error Check@@errorCheck">
+                                      Error Check
+                                    </mat-checkbox>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="m-form__group row">
+                            <div class="col-lg-6">
+                              <label i18n="Default Value|Default Value@@defaultValue">Default Value</label>
+                              <div class="form-group">
+                                <input type="text" formControlName="defaultValue" class="form-control m-input"
+                                  i18n-placeholder="Default Value placeholder|Enter Default Value@@defaultValue.placeholder"
+                                  placeholder="Enter Default Value">
+                              </div>
+                            </div>
+                            <div class="col-lg-6"></div>
+                          </div>
+                        </div>
+                      </td>
+                    </ng-container>
+                  </table>
+                  <!-- Loader image -->
+                  <div *ngIf="showLoaderImage" class="col-lg-12" style="margin-left:0%; margin-top:0%;margin-bottom:0%;"
+                    align="center">
+                    <img src="/assets/img/dashboard/ProgressLoader.gif" height="auto" width="50%" alt="Loading........">
+                  </div>
+                  <h3 i18n="No records found text|No records found@@noRecordsFound" class="text-center noRecordsFound"
+                    *ngIf="noRecordsFound">
+                    No records found!
+                  </h3>
+                </div>
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+        <div class="path"></div>
+        <span class="help-block pull-right" *ngIf="IODHTagError"
+          i18n="Tooltip validation|Please select atleast one IO Tag@@pleaseSelectAtleastOneIOTag">Please
+          select
+          atleast one IO Tag</span>
+        <div class="row" style="    text-align: right;padding: 0px 0 20px;">
+          <div class="col-md-12">
+            <button type="button" (click)="cancelIODHTag()" class="btn btn-default text-center cancelActionButton"
+              i18n="Cancel button|Cancel@@cancel">
+              Cancel
+            </button>
+            &nbsp;
+            <button type="button" class="btn btn-secondary text-center resetActionButton"
+              (click)="resetDHIOTagForm($event)" i18n="Reset button|Reset@@reset">
+              Reset </button>
+            &nbsp;
+            <span>
+              <button i18n="Review&Save button|Review&Save@@review&Save"
+                class="btn btn-primary text-center reviewAndSaveActionButton" type="submit" [disabled]="IODHTagError">
+                Review & Save</button>
+            </span>
+          </div>
+        </div>
+      </form>
+      <div class="formReadMode" *ngIf="previewIODHTagForm">
+        <div class="form-group-custom1">
+          <legend
+            i18n="Page header|Preview Data Handler Response IO Tags Details@@previewDataHandlerResponseIOTagsDetails"
+            class="m-b-15" class="m-b-15">Preview Data Handler Response Tags Details
+          </legend>
+          <div class="form-row">
+            <a (click)="backButton()" class="edit_section">
+              <img src="/assets/img/action/edit.png" alt="edit communication i/o tag detail"
+                i18n-matTooltip="@@ClicktoeditCommunicationIOTagDetail"
+                matTooltip="Click to edit Data Handler Response Tag Detail">
+            </a>
+            <div class="form-group col-sm-6 col-md-6">
+              <label i18n="Data Protocol|Data Protocol@@dataProtocol" class="">Data Protocol</label>
+              <p>
+                {{saveDataSubProtocolDH?.templateName | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-6">
+              <label i18n="Communication|Communication@@communication" class="">Communication</label>
+              <p>
+                {{saveDataSubProtocolDH.communication | hyphen}}
+              </p>
+            </div>
+
+            <div class="form-group col-sm-6 col-md-6">
+              <label i18n="Data Handler|Data Handler@@dataHandler" class="">Data Handler</label>
+              <p>
+                {{saveDataSubProtocolDH.name | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-6">
+              <label i18n="Operation Mode|Operation Mode@@operationMode" class="">Operation Mode</label>
+              <p>
+                {{saveDataSubProtocolDH?.operationMode | hyphen}}
+              </p>
+            </div>
+
+          </div>
+          <fieldset class="mb-4 fieldset_class">
+            <legend class="m-b-15 w-auto">Tag Configuration Details</legend>
+            <app-dh-tag *ngFor="let gatewayIODhTag of updatedTags" [IOTagItem]="gatewayIODhTag"></app-dh-tag>
+            <div class="form-row d-none" *ngFor="let gatewayIODhTag of saveDataSubProtocolDHResponseTags">
+              <legend class="m-b-15 ml-1" i18n="Tag Name|Tag Name@@tagName">
+                {{gatewayIODhTag.tagName | hyphen}}
+              </legend>
+              <div class="form-group col-sm-6 col-md-6">
+                <label i18n="Parent Tag|Parent Tag@@parentTag" class="">Parent Tag</label>
+                <p>
+                  {{gatewayIODhTag.parentTagName | hyphen}}
+                </p>
+              </div>
+              <div class="form-group col-sm-6 col-md-6">
+                <label i18n="Index|Index@@index" class="">Index</label>
+                <p>
+                  {{gatewayIODhTag.tagIndex | hyphen}}
+                </p>
+              </div>
+              <div class="form-group col-sm-6 col-md-6">
+                <label i18n="Length|Length@@length" class="">Length</label>
+                <p>
+                  {{gatewayIODhTag.tagLength | hyphen}}
+                </p>
+              </div>
+              <div class="form-group col-sm-6 col-md-6">
+                <label i18n="Length Unit|Length Unit@@lengthUnit" class="">Length Unit</label>
+                <p>
+                  {{gatewayIODhTag.tagLengthUnitName | hyphen}}
+                </p>
+              </div>
+              <div class="form-group col-sm-6 col-md-6">
+                <label i18n="Length Tag Key Name|Length Tag Key Name@@lengthTagKeyName" class="">Length Tag Key
+                  Name</label>
+                <p>
+                  {{gatewayIODhTag.tagKeyName | hyphen}}
+                </p>
+              </div>
+              <div class="form-group col-sm-6 col-md-6">
+                <label i18n="Data Format|Data Format@@dataFormat" class="">Data Format</label>
+                <p>
+                  {{gatewayIODhTag.dataFormateName | hyphen}}
+                </p>
+              </div>
+              <div class="form-group col-sm-6 col-md-6">
+                <label i18n="Seperator|Seperator@@seperator" class="">Seperator</label>
+                <p>
+                  {{gatewayIODhTag.dataProtocolTagSeparator | hyphen}}
+                </p>
+              </div>
+              <div class="form-group col-sm-6 col-md-6">
+                <label i18n="Participate In|Participate In@@participateIn">Participate In</label><br>
+                <div class="row">
+                  <div class="col-md-6">
+                    <label i18n="Length|Length@@length" class="">Length</label>
+                    <p>
+                      {{gatewayIODhTag.isParticipantInLength ? "Yes":"No"}}
+                    </p>
+                  </div>
+                  <div class="col-md-6">
+                    <label i18n="Error Check|Error Check@@errorCheck" class="">Error Check</label>
+                    <p>
+                      {{gatewayIODhTag.isParticipantInErrorCheck ? "Yes":"No" }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="path"></div>
+            </div>
+          </fieldset>
+          <div class="path finalLine"></div>
+          <div class="row" style="    text-align: right;padding: 23px 0;float:right;">
+            <div class="col-md-12">
+              <button type="button" class="btn btn-default text-center backActionButton" (click)="backButton()"
+                i18n="Back button|Back@@back">
+                Back
+              </button>
+              &nbsp;
+              <button i18n="Save button|Save@@save" class="btn btn-primary text-center saveActionButton" type="submit"
+                (click)="onClickSaveGatewayIODH()">
+                Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Of Pre-View -->
+
+
+  <!-- Global modal notification component selector for final save form-->
+  <app-modal-notification (modelNotificationWarning)="formResetConfirm()" (modelNotificationSuccess)="redirectTo()">
+  </app-modal-notification>

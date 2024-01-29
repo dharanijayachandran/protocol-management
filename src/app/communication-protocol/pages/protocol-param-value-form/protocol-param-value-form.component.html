@@ -1,0 +1,333 @@
+<div class="row">
+  <div class="col-md-12">
+    <h1 i18n="Add Protocol Parameter Value header|Add Protocol Parameter Value@@addProtocolParameterValue"
+      class="page-header" *ngIf="ProtocolparamValueFormView">
+      {{addEditText}} Protocol Parameter Value
+    </h1>
+    <h1
+      i18n="Add Protocol Parameter Value Preview header|Add Protocol Parameter Value Preview@@addProtocolParameterValuePreview"
+      class="page-header" *ngIf="protocolParamValueReadModeView">
+      {{addEditText}} Protocol Parameter Value - Preview
+    </h1>
+    <h1 i18n="Protocol Parameter Value View header|Protocol Parameter Value View@@addProtocolParameterValueView"
+      class="page-header" *ngIf="protocolParamValueViewMode">
+      Protocol Parameter Value - View
+    </h1>
+  </div>
+</div>
+
+<div class="row margin_0px">
+  <div class="col-md-12 padding_0px rowBox">
+    <div class="padding_Form">
+
+      <div *ngIf="ProtocolparamValueFormView">
+        <legend i18n="Parameter Value Information header|Parameter Value Information@@parameterValueInformation"
+          class="m-b-15">Parameter Value Information</legend>
+        <div class="m-form__group row">
+          <div class="col-lg-6">
+            <label i18n='Protocol Name|Protocol Name@@protocolName' class="">Protocol Name </label>
+            <div class="form-group">
+              <input style="font-weight: bold;color: black" type="text" [readonly]="true" class="form-control m-input"
+                value={{protocolName}}>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <label i18n='Protocol ParamGroup Name|Protocol ParamGroup Name@@protocolParamGroupName' class="">Protocol
+              ParamGroup Name </label>
+            <div class="form-group">
+              <input style="font-weight: bold;color: black" type="text" [readonly]="true" class="form-control m-input"
+                value={{protocolGroupName}}>
+            </div>
+          </div>
+        </div>
+        <div class="m-form__group row">
+          <div class="col-lg-6">
+            <label i18n='ParamLevel|ParamLevel@@paramLevel' class="">Param Level </label>
+            <div class="form-group">
+              <input style="font-weight: bold;color: black" type="text" [readonly]="true" class="form-control m-input"
+                value={{protocolParamLevel}}>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <label i18n='Protocol Param Name|Protocol Param Name@@protocolParamName*' class="">Protocol Param Name
+            </label>
+            <div class="form-group">
+              <input style="font-weight: bold;color: black" type="text" [readonly]="true" class="form-control m-input"
+                value={{protocolParamDisplayName}}>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Protocol Param Value Form starts here -->
+      <form [formGroup]="protocolParamValueForm" novalidate (ngSubmit)="previewProtocolParamValue()"
+        *ngIf="ProtocolparamValueFormView">
+        <div class="form-group-custom1">
+          <div class="formBodyCustom1">
+            <div class="m-form__group row">
+              <div class="col-lg-6">
+                <label i18n='Value|Value@@value*' class="">Value<span class="text-danger">*</span></label>
+                <div class="form-group">
+                  <div [ngClass]="{'has-error': ((protocolParamValueForm.get('value').touched ||
+                                protocolParamValueForm.get('value').dirty) &&
+                                protocolParamValueForm.get('value').errors)}">
+                    <input type="text" id="protocolParamValue" formControlName="value" class="form-control m-input"
+                      i18n-placeholder='Value placeholder|Enter Protocol Parameter Value@@value.placeholder'
+                      placeholder="Enter Protocol Parameter Value">
+                    <span class="help-block" *ngIf="((protocolParamValueForm.get('value').touched ||
+                        protocolParamValueForm.get('value').dirty) &&
+                          protocolParamValueForm.get('value').errors)">
+                      <span i18n="Message|Please enter Protocol Parameter Value@@value.message"
+                        *ngIf="protocolParamValueForm.get('value').errors.required">
+                        Please enter Protocol Parameter Value
+                      </span>
+                      <span i18n="Message|Please enter only Alphabate value@@onlyNumericvalue.message" *ngIf="protocolParamValueForm.get('value').errors.pattern && dataTypeName == 'String'">
+                        Please enter only Alphabate value
+                      </span>
+                      <span i18n="Message|Please enter only Numeric value@@onlyAlphabatevalue.message" *ngIf="protocolParamValueForm.get('value').errors.pattern && (dataTypeName == 'Integer' || dataTypeName == 'Long')">
+                        Please enter only Numeric value
+                      </span>
+                      <span i18n="Message|Please enter only Decimal value@@onlyDecimalvalue.message" *ngIf="protocolParamValueForm.get('value').errors.pattern && (dataTypeName == 'Double' || dataTypeName == 'Float')">
+                        Please enter only Decimal value
+                      </span>
+                      <span
+                        i18n="Message|Protocol parameter value already exist.Please enter unique protocol parameter value@@value.message3"
+                        *ngIf="protocolParamValueForm.get('value').errors && protocolParamValueForm.get('value').errors.validateProtocolParamValue">
+                        Protocol parameter value already exist.Please enter unique protocol parameter value
+                      </span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-6">
+                <label i18n='Reference Parameter Value|Reference Parameter Value@@referenceParameterValue'>Reference
+                  Parameter Value </label>
+                <div class="form-group">
+                  <select id="refCommProtocolParamValueId" formControlName="refCommProtocolParamValueId"
+                    class="form-control m-input">
+                    <option i18n='Option|Select@@select' value='null'>--Select--</option>
+                    <option *ngFor="let refProtocolParamValue of refProtocolParamValues"
+                      value={{refProtocolParamValue.id}}>
+                      {{refProtocolParamValue.value}}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="m-form__group row">
+              <div class="col-lg-6">
+                <div class="form-group">
+                  <div [ngClass]="{'has-error': ((protocolParamValueForm.get('isDefaultValue').touched ||
+                               protocolParamValueForm.get('isDefaultValue').dirty) &&
+                               protocolParamValueForm.get('isDefaultValue').errors)}">
+                    <mat-checkbox i18n='Is Default Value|Is Default Value@@isDefaultValue' class="example-margin"
+                      formControlName="isDefaultValue" [disabled]="isEditable" matTooltip="Default value should not be more than one.
+                      " [matTooltipDisabled]="!isEditable">Default
+                    </mat-checkbox>
+                    <span class="help-block" *ngIf="((protocolParamValueForm.get('isDefaultValue').touched ||
+                                  protocolParamValueForm.get('isDefaultValue').dirty) &&
+                                  protocolParamValueForm.get('isDefaultValue').errors)">
+                      <span i18n="Message|IsDefaultValue is required@@isDefaultValue.message"
+                        *ngIf="protocolParamValueForm.get('isDefaultValue').errors.required">
+                        isDefaultValue is required
+                      </span>
+                    </span>
+                    <span id="isDefaultValueValMsg"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6"></div>
+            </div>
+          </div>
+        </div>
+        <div class="path finalLine"></div>
+        <div class="row" style="text-align: right;padding: 23px 0;">
+          <div class="col-md-12">
+            <a>
+              <button type="button" id="cancelProtocol" class="btn btn-default text-center cancelActionButton"
+                i18n="Cancel button|Cancel@@cancel" (click)="cancelProtocolParamValueForm($event)">Cancel</button>
+            </a>&nbsp;
+            <button type="button" i18n="@@Reset" class="btn btn-secondary text-center resetActionButton"
+              [disabled]="!protocolParamValueForm.dirty && protocolParamValueForm.pristine || !protocolParamValueForm.dirty && !protocolParamValueForm.pristine"
+              (click)="resetParamValueForm()" i18n="Reset button|Reset@@reset">Reset</button>&nbsp;
+            <span i18n-matTooltip="Tooltip validation|Fill the mandatory fields@@fillTheMandatoryFields"
+              matTooltip="Please fill the mandatory fields" [matTooltipDisabled]="protocolParamValueForm.valid">
+              <button class="btn btn-primary text-center reviewAndSaveActionButton" type="submit"
+                [disabled]="!protocolParamValueForm.valid" i18n="Review&Save button|Review&Save@@review&Save">
+                Review & Save</button>
+            </span>
+          </div>
+        </div>
+      </form>
+      <!-- Protocol Param Value Form ends here -->
+
+      <!-- Protocol Param Value Read Mode starts here -->
+      <div *ngIf="protocolParamValueReadModeView" class="formReadMode">
+        <div class="form-group-custom1">
+          <legend i18n="Parameter Value Information header|Parameter Value Information@@parameterValueInformation"
+            class="m-b-15">Parameter Value Information</legend>
+          <div class="form-row">
+            <a (click)="backButton('paramGroupDetail')" class="edit_section">
+              <img src="/assets/img/action/edit.png" alt="edit protocol detail"
+                i18n-matTooltip="Image Tooltip|Click to edit Param value Detail@@clickToEditParamValueDetail"
+                matTooltip="Click to edit Param value Detail">
+            </a>
+            <div class="form-group col-sm-6 col-md-6">
+              <label i18n="Protocol Name|Protocol Name@@protocolName" class="">Protocol Name</label>
+              <p>
+                {{protocolName | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-6">
+              <label i18n="Protocol ParamGroup Name|Protocol ParamGroup Name@@protocolParamGroupName" class="">Protocol
+                ParamGroup Name</label>
+              <p>
+                {{protocolGroupName | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-6">
+              <label i18n="ParamLevel|ParamLevel@@paramLevel" class="">Param Level</label>
+              <p>
+                {{protocolParamLevel | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-6">
+              <label i18n="Protocol Param Name|Protocol Param Name@@protocolParamName" class="">Protocol Param
+                Name</label>
+              <p>
+                {{protocolParamDisplayName | hyphen}}
+              </p>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-sm-6 col-md-6">
+              <label i18n="Value|Value@@value" class="">Value</label>
+              <p>
+                {{protocolParamValue.value | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-6">
+              <label i18n="Reference Parameter Value|Reference Parameter Value@@referenceParameterValue"
+                class="">Reference Parameter Value</label>
+              <p *ngIf="protocolParamValue.refCommProtocolParamValueId==null else noBlock">
+                -
+              </p>
+              <ng-template #noBlock>
+                <p *ngFor="let refProtocolParamValue of refProtocolParamValues">
+                  <span *ngIf="refProtocolParamValue.id===parseInt(protocolParamValue.refCommProtocolParamValueId)">
+                    {{refProtocolParamValue.value | hyphen}}
+                  </span>
+                </p>
+              </ng-template>
+            </div>
+            <div class="form-group col-sm-6 col-md-6">
+              <label i18n="Is Default Value|Is Default Value@@isDefaultValue" class="">Is Default Value</label>
+              <p>
+                {{isDefaultValue | hyphen}}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="path finalLine"></div>
+        <div class="row" style="text-align: right;padding: 23px 0;">
+          <div class="col-md-12">
+            <button type="button" class="btn btn-default text-center backActionButton" (click)="backButton($event)"
+              i18n="@@Back"> Back
+            </button>
+            &nbsp;
+            <button i18n="@@Save" class="btn btn-primary text-center saveActionButton" type="submit"
+              (click)="createOrUpdateProtocolParamValue()">
+              Save</button>
+          </div>
+        </div>
+      </div>
+      <!-- Protocol Param Value Read Mode ends here -->
+
+      <!-- Protocol Param Value View starts here -->
+      <div *ngIf="protocolParamValueViewMode">
+        <div class="formReadMode">
+          <div class="form-group-custom1">
+            <legend i18n="@@ParameterValueInformation" class="m-b-15">Parameter Value Information</legend>
+            <div class="form-row">
+              <div class="form-group col-sm-6 col-md-6">
+                <label i18n="Protocol Name|Protocol Name@@protocolName" class="">Protocol Name</label>
+                <p>
+                  {{protocolName | hyphen}}
+                </p>
+              </div>
+              <div class="form-group col-sm-6 col-md-6">
+                <label i18n="Protocol ParamGroup Name|Protocol ParamGroup Name@@protocolParamGroupName"
+                  class="">Protocol ParamGroup Name</label>
+                <p>
+                  {{protocolGroupName | hyphen}}
+                </p>
+              </div>
+              <div class="form-group col-sm-6 col-md-6">
+                <label i18n="ParamLevel|ParamLevel@@paramLevel" class="">Param Level</label>
+                <p>
+                  {{protocolParamLevel | hyphen}}
+                </p>
+              </div>
+              <div class="form-group col-sm-6 col-md-6">
+                <label i18n="Protocol Param Name|Protocol Param Name@@protocolParamName" class="">Protocol Param
+                  Name</label>
+                <p>
+                  {{protocolParamDisplayName | hyphen}}
+                </p>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-sm-6 col-md-6">
+                <label i18n="Value|Value@@value" class="">Value</label>
+                <p>
+                  {{protocolParamValue.value | hyphen}}
+                </p>
+              </div>
+              <div class="form-group col-sm-6 col-md-6">
+                <label i18n="Reference Parameter Value|Reference Parameter Value@@referenceParameterValue"
+                  class="">Reference Parameter Value</label>
+                <p *ngIf="protocolParamValue.refCommProtocolParamValueId==null else noBlock">
+                  -
+                </p>
+                <ng-template #noBlock>
+                  <p *ngFor="let refProtocolParamValue of refProtocolParamValues">
+                    <span *ngIf="refProtocolParamValue.id===parseInt(protocolParamValue.refCommProtocolParamValueId)">
+                      {{refProtocolParamValue.value}}
+                    </span>
+                  </p>
+                </ng-template>
+              </div>
+              <div class="form-group col-sm-6 col-md-6">
+                <label i18n="Is Default Value|Is Default Value@@isDefaultValue" class="">Is Default Value</label>
+                <p>
+                  {{protocolParamValue.isDefaultValue?'Yes':'No'}}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="path finalLine"></div>
+        <div class="row" style="text-align: right;padding: 23px 0;">
+          <div class="col-md-12">
+            <button type="button" class="btn btn-default text-center backActionButton"
+              (click)="cancelProtocolParamValueView($event)" i18n="@@Back"> Back
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- Protocol Param Value View ends here -->
+    </div>
+  </div>
+</div>
+
+<!-- Loader image -->
+<div *ngIf="showLoaderImage" class="col-lg-12 loaderImageStyle" style="margin-left:0%; margin-top:0%;margin-bottom:0%;"
+  align="center">
+  <img src="/assets/img/dashboard/ProgressLoader.gif" height="auto" width="50%" alt="Loading........">
+</div>
+<!-- Global modal notification component selector for cancel and final save form-->
+<app-modal-notification (modelNotificationWarning)="formResetConfirm()" (modelNotificationSuccess)="redirectTo()">
+</app-modal-notification>

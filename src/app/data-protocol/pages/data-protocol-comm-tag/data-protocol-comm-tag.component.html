@@ -1,0 +1,848 @@
+<div class="row">
+  <div class="col-md-12">
+    <h1 i18n="Add Communication Tag header|Add Communication Tag@@addCommunicationTag" class="page-header"
+      *ngIf="dataSubProtocolTagAdd">
+      Add Communication Tag
+    </h1>
+    <h1 i18n="Edit Communication Tag header|Edit Communication Tag@@editCommunicationTag" class="page-header"
+      *ngIf="dataSubProtocolTagEdit">
+      Edit Communication Tag
+    </h1>
+    <h1 i18n="Communication Tag Preview header|Communication Tag Preview@@communicationTagPreview" class="page-header"
+      *ngIf="dataSubProtocolTagFormPreview">
+      Communication Tag - Preview
+    </h1>
+    <h1 i18n="Communication Tag View header|Communication Tag View@@communicationTagView" class="page-header"
+      *ngIf="dataSubProtocolTagsView">
+      Communication Tag - View
+    </h1>
+    <!-- <div class="header_Underline"></div> -->
+  </div>
+</div>
+
+
+<div class="row margin_0px">
+  <div class="col-md-12 padding_0px rowBox">
+    <div class="padding_Form">
+      <form [formGroup]="dataSubProtocolForm" (ngSubmit)="createIOTag()" *ngIf="dataSubProtocolTagForm">
+        <div class="form-group-custom1">
+          <legend i18n="Communication Tag Details header|Communication Tag Details@@communicationTagDetails"
+            class="m-b-15">Communication Tag Details</legend>
+          <div class="formBodyCustom1" id="tenatDetail">
+            <div class="m-form__group row">
+              <div class="col-lg-6">
+                <label i18n="Data Protocol Name|Data Protocol Name@@dataProtocolName" class="">Data Protocol
+                  Name</label>
+                <div class="form-group">
+                  <input type="text" [readOnly]="true" id="templateName" formControlName="templateName"
+                    class="form-control m-input"
+                    i18n-placeholder="Template Name placeholder|Template Name@@dataProtocolName.placeholder"
+                    placeholder="Template Name">
+                </div>
+                <label i18n="Data Handler Format|Data Handler Format@@dataHandlerFormat" class="">Data Handler
+                  Format</label>
+                <div class="form-group">
+                  <input type="text" [readOnly]="true" id="dataHandlerFormat" formControlName="dataHandlerFormat"
+                    class="form-control m-input"
+                    i18n-placeholder="Data Handler Format placeholder|Data Handler Format@@dataHandlerFormat.placeholder"
+                    placeholder="Data Handler Format">
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <label i18n="Communication|Communication@@communication">Communication</label>
+                <div class="form-group">
+                  <input type="text" [readOnly]="true" formControlName="communication" class="form-control m-input"
+                    i18n-placeholder="Communication placeholder|Communication@@communication.placeholder"
+                    placeholder="Communication">
+                </div>
+                <label i18n="Tag Seperator|Tag Seperator@@tagSeperator">Tag Seperator</label>
+                <div class="form-group">
+                  <input type="text" [readOnly]="true" formControlName="seperator" class="form-control m-input"
+                    i18n-placeholder="Tag Seperator placeholder|Tag Seperator@@tagSeperator.placeholder"
+                    placeholder="Tag Seperator">
+                </div>
+              </div>
+            </div>
+
+            <div class="path"></div>
+            <div class="m-form__group row">
+              <div class="col-lg-6">
+                <label i18n="Tag Name|Tag Name@@tagName" class="">Tag Name<span class="text-danger">*</span></label>
+                <div class="form-group">
+                  <div [ngClass]="{'has-error': ((dataSubProtocolForm.get('dataProtocolTagId').touched ||
+                      dataSubProtocolForm.get('dataProtocolTagId').dirty) &&
+                      dataSubProtocolForm.get('dataProtocolTagId').errors)}">
+                    <select id="dataProtocolTagId" formControlName="dataProtocolTagId" class="form-control m-input">
+                      <option i18n="Option|Select@@select" [ngValue]="null">--Select--</option>
+                      <option *ngFor="let iOTag of dataProtocolTags | orderByPipe:'name'" [ngValue]="iOTag.id">{{iOTag.name}}
+                      </option>
+                    </select>
+                    <span class="help-block" *ngIf="((dataSubProtocolForm.get('dataProtocolTagId').touched ||
+                              dataSubProtocolForm.get('dataProtocolTagId').dirty) &&
+                              dataSubProtocolForm.get('dataProtocolTagId').errors)">
+                      <span i18n="Message|Please select Tag@@tagName.message"
+                        *ngIf="dataSubProtocolForm.get('dataProtocolTagId').errors.required">
+                        Please select Tag
+                      </span>
+                    </span>
+                  </div>
+                </div>
+                <label i18n="Index|Index@@index">Index</label>
+                <div class="form-group">
+                  <div
+                    [ngClass]="{'has-error': ((dataSubProtocolForm.get('tagIndex').dirty) && dataSubProtocolForm.get('tagIndex').errors)}">
+                    <input type="text" formControlName="tagIndex" class="form-control m-input"
+                      i18n-placeholder="Index placeholder|Index@@index.placeholder" placeholder="Index">
+                    <span class="help-block" *ngIf="((dataSubProtocolForm.get('tagIndex').dirty) &&
+                        dataSubProtocolForm.get('tagIndex').errors)">
+                      <span i18n="Message|Please enter only Numbers@@index.message"
+                        *ngIf="dataSubProtocolForm.get('tagIndex').errors.pattern">
+                        Please enter only Numbers
+                      </span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <label i18n="Parent Tag|Parent Tag@@parentTag">Parent Tag</label>
+                <div class="form-group">
+                  <select formControlName="parentDataSubProtocolTagId" class=" form-control m-input">
+                    <option i18n="Option|Select@@select" [ngValue]="null">--Select--</option>
+                    <option *ngFor="let gatewayCommIOTagParent of dataSubProtocolTags"
+                      [value]="gatewayCommIOTagParent.id">
+                      {{gatewayCommIOTagParent.tagName}}
+                    </option>
+                  </select>
+                </div>
+                <label i18n="Length|Length@@length">Length</label>
+                <div class="form-group">
+                  <div
+                    [ngClass]="{'has-error': ((dataSubProtocolForm.get('tagLength').dirty) && dataSubProtocolForm.get('tagLength').errors)}">
+                    <input type="text" formControlName="tagLength" class="form-control m-input"
+                      i18n-placeholder="Length placeholder|Enter Length@@length.placeholder" placeholder="Enter Length">
+                    <span class="help-block" *ngIf="((dataSubProtocolForm.get('tagLength').dirty) &&
+                      dataSubProtocolForm.get('tagLength').errors)">
+                      <span i18n="Message|Please enter only Numbers@@length.message"
+                        *ngIf="dataSubProtocolForm.get('tagLength').errors.pattern">
+                        Please enter only Numbers
+                      </span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="m-form__group row">
+              <div class="col-lg-6">
+                <label i18n="Length Unit|Length Unit@@lengthUnit">Length Unit</label>
+                <div class="form-group">
+                  <ejs-dropdownlist id='ddlelement' #ddlelement class="form-control p-0" [value]='tagLengthUnit'
+                  name="tagLengthUnit" formControlName="tagLengthUnit" [dataSource]='tagLengthUnits'
+                  [placeholder]='tagLengthUnitWaterMark' [fields]='tagLengthUnitFields' [popupHeight]='height'
+                  [sortOrder]="sortDropDown" (filtering)='onFilteringTagLengthUnits($event)'
+                  [filterBarPlaceholder]="filterPlaceholder" [allowFiltering]='true'
+                  (change)='tagLengthUnitsOnChange($event)' [locale]='locale'></ejs-dropdownlist>
+                  <!-- <select formControlName="tagLengthUnit" class=" form-control m-input">
+                    <option i18n="Option|Select@@select" [ngValue]="null">--Select--</option>
+                    <option *ngFor="let tagLengthUnit of tagLengthUnits | orderByPipe:'value'" [ngValue]="tagLengthUnit.id">
+                      {{tagLengthUnit.value}}</option>
+                  </select> -->
+                </div>
+                <label i18n="Data Format|Data Format@@dataFormat">Data Format</label>
+                <div class="form-group">
+                  <ejs-dropdownlist id='ddlelement' #ddlelement class="form-control p-0" [value]='dataSubProtocolTagFormatId'
+                  name="dataSubProtocolTagFormatId" formControlName="dataSubProtocolTagFormatId" [dataSource]='dataFormats'
+                  [placeholder]='dataFormatsWaterMark' [fields]='dataFormatFields' [popupHeight]='height'
+                  [sortOrder]="sortDropDown" (filtering)='onFilteringDataFormat($event)'
+                  [filterBarPlaceholder]="filterPlaceholder" [allowFiltering]='true'
+                  (change)='dataFormatsOnChange($event)' [locale]='locale'></ejs-dropdownlist>
+                  <!-- <select formControlName="dataSubProtocolTagFormatId" class=" form-control m-input">
+                    <option i18n="Option|Select@@select" [ngValue]="null">--Select--</option>
+                    <option *ngFor="let dataFormat of dataFormats" [ngValue]="dataFormat.id">{{dataFormat.name}}
+                    </option>
+                  </select> -->
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <label i18n="Tag Key Name|Tag Key Name@@tagKeyName">Tag Key Name</label>
+                <div class="form-group">
+                  <input type="text" formControlName="tagKeyName" class="form-control m-input"
+                    i18n-placeholder="Tag Key Name placeholder|Enter Tag Key Name@@TagKeyName.placeholder"
+                    placeholder="Enter Tag Key Name">
+                </div>
+                <label i18n="Tag Seperator|Tag Seperator@@tagSeperator">Tag Seperator</label>
+                <div class="form-group">
+                  <input type="text" formControlName="dataProtocolTagSeparator" class="form-control m-input"
+                    i18n-placeholder="Tag Seperator placeholder|Tag Seperator@@tagSeperator.placeholder"
+                    placeholder="Tag Seperator">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="m-form__group row">
+            <!--  <div class="col-lg-6">
+                <label i18n="@@HasChildTags">Has Child Tags</label>
+                <div class="form-group">
+                  <input type="checkbox" id="hasChildTags" formControlName="hasChildTags" class="form-control m-input"
+                    i18n-placeholder="@@HasChildTags.placeholder" placeholder="Has Child Tags">
+                </div>
+              </div> -->
+            <div class="col-lg-6">
+              <label i18n="Status|Status@@status">Status</label>
+              <div class="form-group">
+                <mat-radio-group formControlName="status">
+                  <mat-radio-button value="Active" i18n="Radio button|Active@@active" style="margin-right: 20px;"
+                    id="tenantStatusA">
+                    Active
+                  </mat-radio-button>
+                  <mat-radio-button id="tenantStatusI" value="In-Active" i18n="Radio button|InActive@@inActive">
+                    In-Active</mat-radio-button>
+                </mat-radio-group>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+
+
+        <div class="path finalLine"></div>
+        <div class="row" style="    text-align: right;padding: 23px 0;">
+          <div class="col-md-12">
+            <button type="button" id="cancelTemplate" class="btn btn-default text-center cancelActionButton"
+              (click)="cancelDataSubProtocolTagForm()" i18n="Cancel button|Cancel@@cancel"> Cancel
+            </button>
+
+            &nbsp;
+            <button type="button" class="btn btn-secondary text-center resetActionButton"
+              [disabled]="!dataSubProtocolForm.dirty && dataSubProtocolForm.pristine || !dataSubProtocolForm.dirty && !dataSubProtocolForm.pristine"
+              (click)="resetCommIOTagForm()" i18n="Reset button|Reset@@reset"> Reset </button>
+            &nbsp;
+            <span i18n-matTooltip="Tooltip validation|Fill the mandatory fields@@fillTheMandatoryFields"
+              matTooltip="Fill the mandatory fields" [matTooltipDisabled]="dataSubProtocolForm.valid">
+              <button i18n="Review&Save button|Review&Save@@review&Save"
+                class="btn btn-primary text-center reviewAndSaveActionButton" type="submit"
+                [disabled]="!dataSubProtocolForm.valid">
+                Review & Save</button>
+            </span>
+          </div>
+        </div>
+      </form>
+      <!-- End of Parent Form View -->
+
+      <form [formGroup]="dataSubProtocolForm" (ngSubmit)="createIOTag()" *ngIf="dataSubProtocolChildTagEdit">
+        <div class="form-group-custom1">
+          <legend i18n="Communication Tag Details header|Communication Tag Details@@communicationTagDetails"
+            class="m-b-15">Communication Tag Details</legend>
+          <div class="formBodyCustom1" id="tenatDetail">
+            <div class="m-form__group row">
+              <div class="col-lg-6">
+                <label i18n="Template Name|Template Name@@templateName" class="">Template Name</label>
+                <div class="form-group">
+                  <input type="text" [readOnly]="true" id="templateName" formControlName="templateName"
+                    class="form-control m-input"
+                    i18n-placeholder="Template Name placeholder|Template Name@@templateName.placeholder"
+                    placeholder="Template Name">
+                </div>
+                <label i18n="Data Handler Format|Data Handler Format@@dataHandlerFormat" class="">Data Handler
+                  Format</label>
+                <div class="form-group">
+                  <input type="text" [readOnly]="true" id="dataHandlerFormat" formControlName="dataHandlerFormat"
+                    class="form-control m-input"
+                    i18n-placeholder="Data Handler Format placeholder|Data Handler Format@@dataHandlerFormat.placeholder"
+                    placeholder="Data Handler Format">
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <label i18n="Communication|Communication@@communication">Communication</label>
+                <div class="form-group">
+                  <input type="text" [readOnly]="true" formControlName="communication" class="form-control m-input"
+                    i18n-placeholder="Communication placeholder|Communication@@communication.placeholder"
+                    placeholder="Communication">
+                </div>
+                <label i18n="Tag Seperator placeholder|Tag Seperator@@tagSeperator">Tag Seperator</label>
+                <div class="form-group">
+                  <input type="text" [readOnly]="true" formControlName="seperator" class="form-control m-input"
+                    i18n-placeholder="Tag Seperator placeholder|Tag Seperator@@tagSeperator.placeholder"
+                    placeholder="Tag Seperator">
+                </div>
+              </div>
+            </div>
+
+
+            <div class="m-form__group row">
+              <div class="col-lg-6">
+                <label i18n="Tag Name|Tag Name@@tagName*" class="">Tag Name<span class="text-danger">*</span></label>
+                <div class="form-group">
+                  <div [ngClass]="{'has-error': ((dataSubProtocolForm.get('dataProtocolTagId').touched ||
+                      dataSubProtocolForm.get('dataProtocolTagId').dirty) &&
+                      dataSubProtocolForm.get('dataProtocolTagId').errors)}">
+                    <select id="dataProtocolTagId" formControlName="dataProtocolTagId" class="form-control m-input">
+                      <option i18n="Option|Select@@select" [ngValue]="null">--Select--</option>
+                      <option *ngFor="let iOTag of dataProtocolTags" [ngValue]="iOTag.id">{{iOTag.name}}
+                      </option>
+                    </select>
+                    <span class="help-block" *ngIf="((dataSubProtocolForm.get('dataProtocolTagId').touched ||
+                              dataSubProtocolForm.get('dataProtocolTagId').dirty) &&
+                              dataSubProtocolForm.get('dataProtocolTagId').errors)">
+                      <span i18n="Message|Please select Tag@@tagName.message"
+                        *ngIf="dataSubProtocolForm.get('dataProtocolTagId').errors.required">
+                        Please select Tag
+                      </span>
+                    </span>
+                  </div>
+                </div>
+                <label i18n="Index|Index@@index">Index</label>
+                <div class="form-group">
+                  <div
+                    [ngClass]="{'has-error': ((dataSubProtocolForm.get('tagIndex').dirty) && dataSubProtocolForm.get('tagIndex').errors)}">
+                    <input type="text" formControlName="tagIndex" class="form-control m-input"
+                      i18n-placeholder="Index placeholder|Index@@index.placeholder" placeholder="Index">
+                    <span class="help-block" *ngIf="((dataSubProtocolForm.get('tagIndex').dirty) &&
+                        dataSubProtocolForm.get('tagIndex').errors)">
+                      <span i18n="Message|Please enter only Numbers@@index.message"
+                        *ngIf="dataSubProtocolForm.get('tagIndex').errors.pattern">
+                        Please enter only Numbers
+                      </span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <label i18n="Parent Tag|Parent Tag@@parentTag">Parent Tag</label>
+                <div class="form-group">
+                  <select formControlName="parentDataSubProtocolTagId" class=" form-control m-input">
+                    <option i18n="Option|Select@@select" [ngValue]="null">--Select--</option>
+                    <option *ngFor="let gatewayCommIOTagParent of dataSubProtocolTags"
+                      [ngValue="gatewayCommIOTagParent.id">
+                      {{gatewayCommIOTagParent.dataProtocolTag.name}}
+                    </option>
+                  </select>
+                </div>
+                <label i18n="Length|Length@@length">Length</label>
+                <div class="form-group">
+                  <div
+                    [ngClass]="{'has-error': ((dataSubProtocolForm.get('tagLength').dirty) && dataSubProtocolForm.get('tagLength').errors)}">
+                    <input type="text" formControlName="tagLength" class="form-control m-input"
+                      i18n-placeholder="Length placeholder|Enter Length@@length.placeholder" placeholder="Enter Length">
+                    <span class="help-block" *ngIf="((dataSubProtocolForm.get('tagLength').dirty) &&
+                      dataSubProtocolForm.get('tagLength').errors)">
+                      <span i18n="Message|Please enter only Numbers@@length.message"
+                        *ngIf="dataSubProtocolForm.get('tagLength').errors.pattern">
+                        Please enter only Numbers
+                      </span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="m-form__group row">
+              <div class="col-lg-6">
+                <label i18n="Length Unit|Length Unit@@lengthUnit">Length Unit</label>
+                <div class="form-group">
+                  <select formControlName="tagLengthUnit" class=" form-control m-input">
+                    <option i18n="Option|Select@@select" [ngValue]="null">--Select--</option>
+                    <option *ngFor="let tagLengthUnit of tagLengthUnits " [ngValue]="tagLengthUnit.id">
+                      {{tagLengthUnit.value}}</option>
+                  </select>
+                </div>
+                <label i18n="Data Format|Data Format@@dataFormat">Data Format</label>
+                <div class="form-group">
+                  <select formControlName="dataSubProtocolTagFormatId" class=" form-control m-input">
+                    <option i18n="Option|Select@@select" [ngValue]="null">--Select--</option>
+                    <option *ngFor="let dataFormat of dataFormats" [ngValue]="dataFormat.id">{{dataFormat.name}}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <label i18n="Tag Key Name|Tag Key Name@@tagKeyName">Tag Key Name</label>
+                <div class="form-group">
+                  <input type="text" formControlName="tagKeyName" class="form-control m-input"
+                    i18n-placeholder="Tag Key Name placeholder|Enter Tag Key Name@@tagKeyName.placeholder"
+                    placeholder="Enter Tag Key Name">
+                </div>
+                <label i18n="Tag Seperator|Tag Seperator@@tagSeperator">Tag Seperator</label>
+                <div class="form-group">
+                  <input type="text" formControlName="dataProtocolTagSeparator" class="form-control m-input"
+                    i18n-placeholder="Tag Seperator placeholder|Tag Seperator@@tagSeperator.placeholder"
+                    placeholder="Tag Seperator">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="m-form__group row">
+            <!--  <div class="col-lg-6">
+                <label i18n="@@HasChildTags">Has Child Tags</label>
+                <div class="form-group">
+                  <input type="checkbox" id="hasChildTags" formControlName="hasChildTags" class="form-control m-input"
+                    i18n-placeholder="@@HasChildTags.placeholder" placeholder="Has Child Tags">
+                </div>
+              </div> -->
+            <div class="col-lg-6">
+              <label i18n="Status|Status@@status">Status</label>
+              <div class="form-group">
+                <mat-radio-group formControlName="status">
+                  <mat-radio-button value="Active" i18n="Radio button|Active@@active" style="margin-right: 20px;"
+                    id="tenantStatusA">
+                    Active
+                  </mat-radio-button>
+                  <mat-radio-button id="tenantStatusI" value="In-Active" i18n="Radio button|InActive@@inActive">
+                    In-Active</mat-radio-button>
+                </mat-radio-group>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="path finalLine"></div>
+        <div class="row" style="    text-align: right;padding: 23px 0;">
+          <div class="col-md-12">
+            <button type="button" id="cancelTemplate" class="btn btn-default text-center cancelActionButton"
+              (click)="cancelGatewayCommIOTagChildForm(dataSubProtocolTag.parentDataSubProtocolTagId)"
+              i18n="Cancel button|Cancel@@cancel">
+              Cancel
+            </button>
+            &nbsp;
+            <button type="button" class="btn btn-secondary text-center resetActionButton"
+              [disabled]="!dataSubProtocolForm.dirty && dataSubProtocolForm.pristine || !dataSubProtocolForm.dirty && !dataSubProtocolForm.pristine"
+              (click)="resetCommIOTagForm()" i18n="Reset button|Reset@@reset"> Reset </button>
+            &nbsp;
+            <span i18n-matTooltip="Tooltip validation|Fill the mandatory fields@@fillTheMandatoryFields"
+              matTooltip="Fill the mandatory fields" [matTooltipDisabled]="dataSubProtocolForm.valid">
+              <button i18n="Review&Save button|Review&Save@@review&Save"
+                class="btn btn-primary text-center reviewAndSaveActionButton" type="submit"
+                [disabled]="!dataSubProtocolForm.valid">
+                Review & Save</button>
+            </span>
+          </div>
+        </div>
+      </form>
+
+      <!-- Form Preview starts here -->
+
+      <div *ngIf="dataSubProtocolTagFormPreview" class="formReadMode">
+        <div class="form-group-custom1">
+          <legend i18n="Communication Tag Details header|Communication Tag Details@@communicationTagDetails"
+            class="m-b-15">Communication Tag Details</legend>
+          <div class="form-row">
+            <a (click)="backButton(dataSubProtocolTag.parentDataSubProtocolTagId)" class="edit_section">
+              <img src="/assets/img/action/edit.png" alt="edit communication i/o tag detail"
+                i18n-matTooltip="Image placeholder|Click to edit Communication Tag Detail@@clicktoeditCommunicationIOTagDetail"
+                matTooltip="Click to edit Communication Tag Detail">
+            </a>
+            <div class="form-group col-sm-6 col-md-4">
+              <label i18n="Template Name|Template Name@@templateName" class="">Template Name</label>
+              <p>
+                {{dataSubProtocol.dataProtocol.name | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-4">
+              <label i18n="Communication|Communication@@communication" class="">Communication</label>
+              <p>
+                {{dataSubProtocol.commProtocol.name | hyphen}}
+              </p>
+            </div>
+
+            <div class="form-group col-sm-6 col-md-4">
+              <label i18n="Data Handler Format|Data Handler Format@@dataHandlerFormat" class="">Data Handler
+                Format</label>
+              <p>
+                {{dataSubProtocolFormatNameValue | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-4">
+              <label i18n="Tag Seperator|Tag Seperator@@tagSeperator" class="">Tag Seperator</label>
+              <p>
+                {{dataSubProtocol.dataProtocolTagSeparator | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-4">
+              <label i18n="Tag Name|Tag Name@@tagName" class="">Tag Name</label>
+              <p *ngFor="let gatewayIOTag of allDataProtocolTags">
+                <span *ngIf='gatewayIOTag.id === parseInt(dataSubProtocolTag.dataProtocolTagId)'>{{gatewayIOTag.name |
+                  hyphen}}</span>
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-4">
+              <label i18n="Parent Tag|Parent Tag@@parentTag" class="">Parent Tag</label>
+              <p *ngIf='dataSubProtocolTag.parentDataSubProtocolTagId===null else noBlock'>
+                {{dataSubProtocolTag.parentDataSubProtocolTagId | hyphen}}
+              </p>
+              <ng-template #noBlock>
+                <p *ngFor="let parentIOTag of allDataSubProtocolTags">
+                  <span
+                    *ngIf="parentIOTag.id === parseInt(dataSubProtocolTag.parentDataSubProtocolTagId)">{{parentIOTag.dataProtocolTag.name}}</span>
+                </p>
+              </ng-template>
+            </div>
+            <div class="form-group col-sm-6 col-md-4">
+              <label i18n="Index|Index@@index" class="">Index</label>
+              <p>
+                {{dataSubProtocolTag.tagIndex | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-4">
+              <label i18n="Length|Length@@length" class="">Length</label>
+              <p>
+                {{dataSubProtocolTag.tagLength | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-4">
+              <label i18n="Length Unit|Length Unit@@lengthUnit" class="">Length Unit</label>
+              <p *ngIf='dataSubProtocolTag.tagLengthUnit===null else unit'>
+                {{dataSubProtocolTag.tagLengthUnit | hyphen}}
+              </p>
+              <ng-template #unit>
+                <p *ngFor="let tagLengthUnit of tagLengthUnits">
+                  <span *ngIf="tagLengthUnit.id === dataSubProtocolTag.tagLengthUnit">{{tagLengthUnit.value |
+                    hyphen}}</span>
+                </p>
+              </ng-template>
+            </div>
+            <div class="form-group col-sm-6 col-md-4">
+              <label i18n="Length Tag Key Name|Length Tag Key Name@@lengthTagKeyName" class="">Length Tag Key
+                Name</label>
+              <p>
+                {{dataSubProtocolTag.tagKeyName | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-4">
+              <label i18n="Data Format|Data Format@@dataFormat" class="">Data Format</label>
+              <p *ngIf='dataSubProtocolTag.dataSubProtocolTagFormatId===null else dateFormate'>
+                {{dataSubProtocolTag.dataSubProtocolTagFormatId | hyphen}}
+              </p>
+              <ng-template #dateFormate>
+                <p *ngFor="let dataFormat of dataFormats">
+                  <span
+                    *ngIf='dataFormat.id === parseInt(dataSubProtocolTag.dataSubProtocolTagFormatId)'>{{dataFormat.name
+                    | hyphen}}</span>
+                </p>
+              </ng-template>
+            </div>
+            <div class="form-group col-sm-6 col-md-4">
+              <label i18n="Status|Status@@status" class="">Status</label>
+              <p *ngIf="dataSubProtocolTag.status == 'I'; else activeBlock">
+                In-Active
+              </p>
+              <ng-template #activeBlock>
+                <p>
+                  {{dataSubProtocolTag.status}}
+                </p>
+              </ng-template>
+            </div>
+            <div class="form-group col-sm-6 col-md-4">
+              <label i18n="Seperator|Seperator@@seperator" class="">Seperator</label>
+              <p>
+                {{dataSubProtocolTag.dataProtocolTagSeparator | hyphen}}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="path finalLine"></div>
+        <div class="row" style="    text-align: right;padding: 23px 0;float:right;">
+          <div class="col-md-12">
+            <button type="button" class="btn btn-default text-center backActionButton"
+              (click)="backButton(dataSubProtocolTag.parentDataSubProtocolTagId)" i18n="Back button|Back@@back"> Back
+            </button>
+            &nbsp;
+            <button i18n="Save button|Save@@save" class="btn btn-primary text-center saveActionButton" type="submit"
+              (click)="saveCommIOTagInfo()">
+              Save</button>
+          </div>
+        </div>
+        <div class="path"></div>
+      </div>
+
+      <!-- End Of Pre-View -->
+
+
+
+
+
+      <!-- Comm IOI Tag View for Parent Starts Here -->
+
+      <div *ngIf="dataSubProtocolTagView" class="formReadMode">
+        <div class="form-group-custom1">
+          <legend
+            i18n="Data Protocol Communication Tag Info header|Data Protocol Communication Tag Info@@dataProtocolCommunicationTagInfo"
+            class="m-b-15">Data Protocol Communication Tag Info</legend>
+          <div class="form-row">
+            <div class="form-group col-sm-6 col-md-4">
+              <label i18n="Tag Name|Tag Name@@tagName" class="">Tag Name</label>
+              <p *ngIf="dataSubProtocolTagVIew.dataProtocolTag !=null">
+                {{dataSubProtocolTagVIew.dataProtocolTag.name | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-4">
+              <label i18n="Index|Index@@index" class="">Index</label>
+              <p>
+                {{dataSubProtocolTagVIew.tagIndex=='0'?0:dataSubProtocolTagVIew.tagIndex | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-4">
+              <label i18n="Length|Length@@length" class="">Length</label>
+              <p>
+                {{dataSubProtocolTagVIew.tagLength | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-4">
+              <label i18n="Length Unit|Length Unit@@lengthUnit" class="">Length Unit</label>
+              <p *ngIf='dataSubProtocolTagVIew.tagLengthUnit===null else lengthUnit'>
+                {{dataSubProtocolTagVIew.tagLengthUnit | hyphen}}
+              </p>
+              <ng-template #lengthUnit>
+                <p *ngFor="let tagLengthUnit of tagLengthUnits">
+                  <span *ngIf="tagLengthUnit.id === dataSubProtocolTagVIew.tagLengthUnit">{{tagLengthUnit.value}}</span>
+                </p>
+              </ng-template>
+            </div>
+            <div class="form-group col-sm-6 col-md-4">
+              <label i18n="Tag key Name|Tag key Name@@tagkeyName" class="">Tag key Name</label>
+              <p>
+                {{dataSubProtocolTagVIew.tagKeyName | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-4">
+              <label i18n="Data Format|Data Format@@dataFormat" class="">Data Format</label>
+              <ng-container *ngIf="dataSubProtocolTagVIew.dataSubProtocolTagFormat==null;else dateFormate">
+                <p>
+                  {{dataSubProtocolTagVIew?.dataSubProtocolTagFormat | hyphen}}
+                </p>
+              </ng-container>
+              <ng-template #dateFormate>
+                <ng-container *ngIf="dataSubProtocolTagVIew.dataSubProtocolTagFormat!=null;else trans">
+                  <p>
+                    {{dataSubProtocolTagVIew.dataSubProtocolTagFormat.name}}
+                  </p>
+                </ng-container>
+              </ng-template>
+              <ng-template #trans>
+                <p></p>
+              </ng-template>
+            </div>
+            <div class="form-group col-sm-6 col-md-4">
+              <label i18n="Parent Tag|Parent Tag@@parentTag" class="">Parent Tag</label>
+              <p *ngIf='dataSubProtocolTagVIew.parentDataSubProtocolTagId===null else parentTag'>
+                {{dataSubProtocolTagVIew.parentDataSubProtocolTagId | hyphen}}
+              </p>
+              <ng-template #parentTag>
+                <p *ngFor="let parentIOTag of dataSubProtocolTags">
+                  <span
+                    *ngIf="parentIOTag.id === parseInt(dataSubProtocolTagVIew.parentDataSubProtocolTagId)">{{parentIOTag.dataProtocolTag.name}}</span>
+                </p>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+        <div class="path finalLine"></div>
+        <div class="row" style="    text-align: right;padding: 23px 0;">
+          <div class="col-md-12">
+            <button type="button" class="btn btn-default text-center backActionButton"
+              (click)="cancelGatewayCommIOTagView()" i18n="Back button|Back@@back"> Back
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Comm IOI Tag View for Parent Ends Here -->
+
+
+      <!-- Comm IOI Tag View for Child Starts Here -->
+
+      <div *ngIf="dataSubProtocolChildTagView" class="formReadMode">
+        <div class="form-group-custom1">
+          <legend
+            i18n="Data Protocol Communication Tag Info header|Data Protocol Communication Tag Info@@dataProtocolCommunicationTagInfo"
+            class="m-b-15">Data Protocol Communication Tag Info</legend>
+          <div class="form-row">
+            <div class="form-group col-sm-6 col-md-4">
+              <label i18n="Tag Name|Tag Name@@tagName" class="">Tag Name</label>
+              <p>
+                {{dataSubProtocolTagVIew.dataProtocolTag.name | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-4">
+              <label i18n="Index|Index@@index" class="">Index</label>
+              <p>
+                {{dataSubProtocolTagVIew.tagIndex | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-4">
+              <label i18n="Length|Length@@length" class="">Length</label>
+              <p>
+                {{dataSubProtocolTagVIew.tagLength | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-4">
+              <label i18n="Length Unit|Length Unit@@lengthUnit" class="">Length Unit</label>
+              <p *ngIf='dataSubProtocolTagVIew.tagLengthUnit===null else lengthUnit'>
+                {{dataSubProtocolTagVIew.tagLengthUnit | hyphen}}
+              </p>
+              <ng-template #lengthUnit>
+                <p *ngFor="let tagLengthUnit of tagLengthUnits">
+                  <span *ngIf="tagLengthUnit.id === dataSubProtocolTagVIew.tagLengthUnit">{{tagLengthUnit.value}}</span>
+                </p>
+              </ng-template>
+            </div>
+            <div class="form-group col-sm-6 col-md-4">
+              <label i18n="Tag key Name|Tag key Name@@tagkeyName" class="">Tag key Name</label>
+              <p>
+                {{dataSubProtocolTagVIew.tagKeyName | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-4">
+              <label i18n="Data Format|Data Format@@dataFormat" class="">Data Format</label>
+              <p *ngIf='dataSubProtocolTagVIew.dataSubProtocolTagFormat.name===null else dateFormate'>
+                {{dataSubProtocolTagVIew.dataSubProtocolTagFormat.name | hyphen}}
+              </p>
+              <ng-template #dateFormate>
+                <p>
+                  {{dataSubProtocolTagVIew.dataSubProtocolTagFormat.name}}
+                </p>
+              </ng-template>
+            </div>
+            <div class="form-group col-sm-6 col-md-4">
+              <label i18n="Parent Tag|Parent Tag@@parentTag" class="">Parent Tag</label>
+              <p *ngIf="dataSubProtocolTagVIew.parentDataSubProtocolTagId===null else parentTag">
+                {{dataSubProtocolTagVIew.parentDataSubProtocolTagId | hyphen}}
+              </p>
+              <ng-template #parentTag>
+                <p *ngFor="let parentIOTag of dataSubProtocolTags">
+                  <span
+                    *ngIf="parentIOTag.id === parseInt(dataSubProtocolTagVIew.parentDataSubProtocolTagId)">{{parentIOTag.dataProtocolTag.name}}</span>
+                </p>
+              </ng-template>
+            </div>
+
+          </div>
+        </div>
+        <div class="path finalLine"></div>
+        <div class="row" style="    text-align: right;padding: 23px 0;">
+          <div class="col-md-12">
+            <button type="button" class="btn btn-default text-center backActionButton"
+              (click)="cancelDataSubProtocolTagForm()" i18n="Back button|Back@@back">
+              Back
+            </button>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- List View of Child Tags Starts Here -->
+
+      <div id="gatewayCommIOTagsList" style="clear: both;" *ngIf="dataSubProtocolChildTagsView">
+        <div class="container mat-elevation-z8 panel panel-inverse mb-3" style="position: relative">
+          <app-panel-user i18n-name="Panel header|List of Child Communication Tags@@listofCommunicationTags"
+            name="List of Child Communication Tags: {{dataSubProtocolTagVIew.dataProtocolTag.name}}" #panelHeader
+            (refreshTableList)="refreshTableListFunction();panelHeader.setTableDasourceAsDefault(this.dataSubProtocolDataSource)"
+            (scrollBarDirective)="onPaginateViewScrollToTop()">
+
+            <!-- Input field for search -->
+            <input searchfield style="display: none;" id="filter" class="form-control m-input ml-2"
+              (keyup)="panelHeader.applyFilter($event.target.value, dataSubProtocolDataSource)"
+              i18n-placeholder="Search|Search placeholder@@search" matInput placeholder="Search.." />
+
+            <!-- Search button -->
+            <a searchButton href="javascript:;" i18n-matTooltip="Search button|Click to Search@@ClickToSearch"
+              matTooltip="Click to Search" class="btn btn-xs btn-icon btn-circle btn-default"
+              (click)="panelHeader.searchButton(this.dataSubProtocolDataSource)">
+              <i class="fa fa-search"></i>
+            </a>
+
+            <div class="position-relative">
+              <div class="ps position-relative" appScrollbarDirective
+                *ngIf="dataSubProtocolDataSource && dataSubProtocolDataSource.data.length">
+                <ng-container *ngTemplateOutlet="matTable"></ng-container>
+              </div>
+
+              <div class="table-responsive"
+                *ngIf="!dataSubProtocolDataSource || !dataSubProtocolDataSource.data.length">
+                <ng-container *ngTemplateOutlet="matTable"></ng-container>
+              </div>
+              <!-- Loader image -->
+              <div *ngIf="showLoaderImage" class="col-lg-12" style="margin-left:0%; margin-top:0%;margin-bottom:0%;"
+                align="center">
+                <img src="/assets/img/dashboard/ProgressLoader.gif" height="auto" width="50%" alt="Loading........">
+              </div>
+              <h3 i18n="No records found text|No records found@@noRecordsFound" class="text-center noRecordsFound"
+                *ngIf="(NoRecordsFound && !showLoaderImage) || (dataSubProtocolDataSource&&dataSubProtocolDataSource.filteredData.length==0 && !showLoaderImage)">
+                No records found!
+              </h3>
+              <app-mat-table-paginator [dataSource]="this.dataSubProtocolDataSource" #myPaginatorChildComponent
+                (paginator)="matTablePaginator($event)" (scrollBarDirective)="onPaginateViewScrollToTop()">
+              </app-mat-table-paginator>
+              <!-- <mat-paginator [hidden]="NoRecordsFound" #myPaginator
+                [length]="dataSubProtocolDataSource && dataSubProtocolDataSource.data.length" [pageSize]="10"
+                [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons>
+              </mat-paginator> -->
+            </div>
+            <ng-template #matTable>
+              <table mat-table [dataSource]="dataSubProtocolDataSource" class="table table-striped table-bordered"
+                matSort>
+                <!--  <ng-container matColumnDef="id">
+              <th *matHeaderCellDef>Id</th>
+              <td mat-cell *matCellDef="let element; let i = index;"> {{i+1}} </td>
+            </ng-container> -->
+                <ng-container matColumnDef="id">
+                  <th i18n="Table id|Sno@@sNo" mat-header-cell *matHeaderCellDef>S.No.</th>
+                  <td mat-cell *matCellDef="let element; let i = index;">
+                    {{ (i+1) + (myPaginator.pageIndex * myPaginator.pageSize) }}</td>
+                </ng-container>
+                <ng-container matColumnDef="ioTag">
+                  <th i18n="Table|Name@@name" mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+                  <td mat-cell *matCellDef="let element"> {{element.dataProtocolName}} </td>
+                </ng-container>
+                <ng-container matColumnDef="index">
+                  <th i18n="Table|Index@@index" mat-header-cell *matHeaderCellDef mat-sort-header>Index</th>
+                  <td mat-cell *matCellDef="let element"> {{element.tagIndex}} </td>
+                </ng-container>
+                <ng-container matColumnDef="length">
+                  <th i18n="Table|Length@@length" mat-header-cell *matHeaderCellDef mat-sort-header>Length</th>
+                  <td mat-cell *matCellDef="let element"> {{element.tagLength}} </td>
+                </ng-container>
+                <ng-container matColumnDef="lengthUnit">
+                  <th i18n="Table|Length Unit@@lengthUnit" mat-header-cell *matHeaderCellDef mat-sort-header>Length Unit
+                  </th>
+                  <td mat-cell *matCellDef="let element">{{element.tagLengthUnitValue}}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="tagKeyName">
+                  <th i18n="Table|Tag key Name@@tagkeyName" mat-header-cell *matHeaderCellDef mat-sort-header>Tagkey
+                    Name</th>
+                  <td mat-cell *matCellDef="let element"> {{element.tagKeyName}} </td>
+                </ng-container>
+                <ng-container matColumnDef="dataFormat">
+                  <th i18n="Table|Data Format@@dataFormat" mat-header-cell *matHeaderCellDef mat-sort-header>Data Format
+                  </th>
+                  <td mat-cell *matCellDef="let element">{{element.dataFormateName}}</td>
+                </ng-container>
+                <ng-container matColumnDef="parentTag">
+                  <th i18n="Table|Parent Tag@@ParentTag" mat-header-cell *matHeaderCellDef mat-sort-header>Parent Tag
+                  </th>
+                  <td mat-cell *matCellDef="let element">{{element.paretTagName}}</td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="dataSubProtocolDisplayedColumns;sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: dataSubProtocolDisplayedColumns;"></tr>
+              </table>
+            </ng-template>
+          </app-panel-user>
+
+
+
+        </div>
+
+      </div>
+
+
+      <!-- End Of Comm IO Tag Form -->
+    </div>
+  </div>
+</div>
+
+
+<!-- Global modal notification component selector for cancel and final save form-->
+<app-modal-notification (modelNotificationWarning)="alertRedirection()"
+  (modelNotificationSuccess)="createDataSubProtocol()" (modelNotificationDanger)="confirmDelete();">
+</app-modal-notification>

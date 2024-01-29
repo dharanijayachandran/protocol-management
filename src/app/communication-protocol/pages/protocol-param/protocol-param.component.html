@@ -1,0 +1,21 @@
+<!-- begin breadcrumb -->
+
+<script>
+  $(document).ready(function () {
+    $("#myTab li:eq(1) a").tab('show');
+  })
+</script>
+<!-- <ol class="breadcrumb pull-right">
+  <li i18n="@@Home" class="breadcrumb-item"><a href="javascript:;">Home</a></li>
+  <li i18n="@@Prorocol" class="breadcrumb-item"><a href="javascript:;">Prorocol</a></li>
+  <li i18n="@@ProtocolParameterManagement" class="breadcrumb-item active">Protocol Parameter Management</li>
+</ol> -->
+<!-- end breadcrumb -->
+<!-- begin page-header -->
+<h1 i18n="Protocol Configuration header|Protocol Configuration@@protocolMasterConfiguration" class="page-header">Protocol Configuration<small></small></h1>
+<!-- end page-header -->
+
+<div id="protocolParamList">
+  <app-protocol-param-view>
+  </app-protocol-param-view>
+</div>

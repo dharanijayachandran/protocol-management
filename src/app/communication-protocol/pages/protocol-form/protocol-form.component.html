@@ -1,0 +1,251 @@
+<div class="row">
+  <div class="col-md-12">
+    <h1 i18n="Add Protocol header|Add Protocol@@addProtocol" class="page-header" *ngIf="protocolFormView">
+      {{addEditText}} Protocol
+    </h1>
+    <h1 i18n="Add Protocol Preview header|Add Protocol Preview@@addProtocolPreview" class="page-header"
+      *ngIf="protocolReadModeView">
+      {{addEditText}} Protocol - Preview
+    </h1>
+    <h1 i18n="Protocol View header|Protocol View@@protocolView" class="page-header" *ngIf="protocolView">
+      Protocol - View
+    </h1>
+  </div>
+</div>
+
+<div class="row margin_0px">
+  <div class="col-md-12 padding_0px rowBox">
+    <div class="padding_Form">
+      <!-- Protocol form view starts here  -->
+      <form [formGroup]="protocolForm" novalidate (ngSubmit)="createProtocol()" *ngIf="protocolFormView">
+        <!-- <input type="hidden" id="protocolId" name="protocolId" value="" /> -->
+        <div class="form-group-custom1">
+          <legend i18n="Protocol Information header|Protocol Information@@protocolInfo" class="m-b-15">Protocol
+            Information</legend>
+          <div class="formBodyCustom1" id="protocolDetails">
+            <div class=" m-form__group row">
+              <div class="col-lg-6">
+                <label i18n='Name|Name@@name*' class="">Name<span class="text-danger"> *</span></label>
+                <div class="form-group">
+                  <div [ngClass]="{'has-error': ((protocolForm.get('name').touched ||
+                    protocolForm.get('name').dirty) &&
+                    protocolForm.get('name').errors)}">
+                    <input (keyup)="onKey($event)" type="text" id="name" formControlName="name"
+                      class="form-control m-input"
+                      i18n-placeholder="Protocol Name placeholder|Enter Protocol Name@@protocolName.placeholder"
+                      placeholder="Enter Protocol Name">
+                    <span class="help-block" *ngIf="((protocolForm.get('name').touched ||
+                        protocolForm.get('name').dirty) &&
+                        protocolForm.get('name').errors)">
+                      <span i18n="Message|Please enter Protocol Name@@protocolName.message"
+                        *ngIf="protocolForm.get('name').errors.required">
+                        Please enter Protocol Name
+                      </span>
+                      <span i18n="Message|Please enter valid Characters@@protocolName.message1"
+                        *ngIf="protocolForm.get('name').errors.pattern">
+                        Please enter valid Characters
+                      </span>
+                      <span  *ngIf="protocolForm.get('name').errors.validateProtocolName">
+                        Protocol name already exist.Please enter unique protocol name
+                      </span>
+                    </span>
+                  </div>
+                </div>
+                <label i18n="ParamLevel|ParamLevel@@paramLevel*">Param Level<span class="text-danger"> *</span> </label>
+                <div class="form-group">
+                  <div [ngClass]="{'has-error': ((protocolForm.get('commProtocolLevel').touched || protocolForm.get('commProtocolLevel').dirty) &&
+                  protocolForm.get('commProtocolLevel').errors)}">
+                    <select id="commProtocolLevel" formControlName="commProtocolLevel" class="form-control m-input">
+                      <option i18n="Option|Select@@select" value=''>--Select--</option>
+                      <option i18n="Option|Node to Device@@n2D" value="N2D">Node to Device</option>
+                      <option i18n="Option|Node to Platform@@n2P" value="N2P">Node to Platform</option>
+                      <!-- <option i18n="Option|SMS@@sMS" value="SMS">SMS</option> -->
+                    </select>
+                    <span class="help-block" *ngIf="((protocolForm.get('commProtocolLevel').touched ||
+                        protocolForm.get('commProtocolLevel').dirty) &&
+                        protocolForm.get('commProtocolLevel').errors)">
+                      <span i18n="Message|Please select ParamLevel@@paramLevel.message"
+                        *ngIf="protocolForm.get('commProtocolLevel').errors.required">
+                        Please select ParamLevel
+                      </span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <label i18n="Description|Description@@description" class="">Description</label>
+                <div class="form-group">
+                  <textarea type="text" id="description" formControlName="description"
+                    class="form-control m-input textAreaHeight "
+                    i18n-placeholder="Description placeholder|Enter Description@@description.placeholder"
+                    placeholder="Enter Description"></textarea>
+                </div>
+              </div>
+            </div>
+
+            <div class=" m-form__group row">
+              <div class="col-lg-6">
+                <label i18n='Code|Code@@code*' class="">Code<span class="text-danger"> *</span></label>
+                <div class="form-group">
+                  <div [ngClass]="{'has-error': ((protocolForm.get('code').touched ||
+                    protocolForm.get('code').dirty) &&
+                    protocolForm.get('code').errors)}">
+                    <input type="text" id="code" formControlName="code" class="form-control m-input text-uppercase"
+                      i18n-placeholder="Protocol code placeholder|Enter Protocol Code@@protocolCode.placeholder"
+                      placeholder="Enter Protocol Code">
+                    <span class="help-block" *ngIf="((protocolForm.get('code').touched ||
+                        protocolForm.get('code').dirty) &&
+                        protocolForm.get('code').errors)">
+                      <span i18n="Message|Please enter Protocol code@@protocolcode.message"
+                        *ngIf="protocolForm.get('code').errors.required">
+                        Please enter Protocol Code
+                      </span>
+                      <span i18n="Message|Please enter valid Characters@@protocolCode.message1"
+                        *ngIf="protocolForm.get('code').errors.pattern">
+                        Please enter valid Characters
+                      </span>
+                      <span *ngIf="protocolForm.get('code').errors.checkProtocolCodeValue">
+                        Protocol code already exist.Please enter unique protocol code
+                      </span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div class="path finalLine"></div>
+        <div class="row" style="    text-align: right;padding: 23px 0;">
+          <div class="col-md-12">
+            <a (click)="cancelButton()">
+              <button type="button" id="cancelProtool" class="btn btn-default text-center cancelActionButton"
+                i18n="Cancel button|Cancel@@cancel"> Cancel
+              </button>
+            </a>
+            &nbsp;
+            <button type="button" class="btn btn-secondary text-center resetActionButton"
+              [disabled]="!protocolForm.dirty && protocolForm.pristine || !protocolForm.dirty && !protocolForm.pristine"
+              (click)="resetProtocolForm()" i18n="Reset button|Reset@@reset"> Reset </button>
+            &nbsp;
+            <span i18n-matTooltip="Tooltip validation|Fill the mandatory fields@@fillTheMandatoryFields"
+              matTooltip="Please fill the mandatory fields" [matTooltipDisabled]="protocolForm.valid">
+              <button class="btn btn-primary text-center reviewAndSaveActionButton" type="submit"
+                [disabled]="!protocolForm.valid" i18n="Review&Save button|Review&Save@@review&Save">
+                Review & Save</button>
+            </span>
+          </div>
+        </div>
+      </form>
+      <!-- Protocol form view ends here  -->
+
+      <!-- protocol form read mode view starts here  -->
+      <div *ngIf="protocolReadModeView" class="formReadMode">
+        <div class="form-group-custom1">
+          <legend i18n="Protocol Information header|Protocol Information@@protocolInfo" class="m-b-15">Protocol
+            Information</legend>
+          <div class="form-row">
+            <a (click)="backButton('protocolDetail')" class="edit_section">
+              <img src="/assets/img/action/edit.png" alt="edit protocol detail"
+                i18n-matTooltip="Image Tooltip|Click to edit Protocol Detail@@clickToEditProtocolDetail"
+                matTooltip="Click to edit Protocol Detail">
+            </a>
+            <div class="form-group col-sm-6 col-md-4">
+              <label i18n="Protocol Name|Protocol Name@@protocolName" class="">Protocol Name</label>
+              <p>
+                {{protocol.name | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-4">
+              <label i18n="Description|Description@@description" class="">Description</label>
+              <p>
+                {{protocol.description | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-4">
+              <label i18n="ParamLevel|ParamLevel@@paramLevel" class="">ParamLevel</label>
+              <p>
+                {{protocolParamLevel | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-4">
+              <label i18n="Code|Code@@code" class="">Code</label>
+              <p>
+                {{protocol.code | hyphen}}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="path finalLine"></div>
+        <div class="row" style="    text-align: right;padding: 23px 0;">
+          <div class="col-md-12">
+            <button type="button" class="btn btn-default text-center backActionButton" (click)="backButton($event)"
+              i18n="Back button|Back@@back"> Back
+            </button>
+            &nbsp;
+            <button i18n="Save button|Save@@save" class="btn btn-primary text-center saveActionButton" type="submit"
+              (click)="createOrUpdateProtocol()">
+              Save</button>
+          </div>
+        </div>
+      </div>
+      <!-- protocol form read mode view ends here  -->
+
+
+      <!-- Protocol view mode starts here-->
+      <div *ngIf="protocolView">
+        <div class="formReadMode">
+          <div class="form-group-custom1">
+            <legend i18n="Protocol Information header|Protocol Information@@protocolInfo" class="m-b-15">Protocol
+              Information</legend>
+            <div class="form-row">
+              <div class="form-group col-sm-6 col-md-4">
+                <label i18n="Protocol Name|Protocol Name@@protocolName" class="">Protocol Name</label>
+                <p>
+                  {{protocol.name | hyphen}}
+                </p>
+              </div>
+              <div class="form-group col-sm-6 col-md-4">
+                <label i18n="Description|Description@@description" class="">Description</label>
+                <p>
+                  {{protocol.description | hyphen}}
+                </p>
+              </div>
+              <div class="form-group col-sm-6 col-md-4">
+                <label i18n="ParamLevel|ParamLevel@@paramLevel" class="">ParamLevel</label>
+                <p>
+                  {{protocol.commProtocolLevel | hyphen}}
+                </p>
+              </div>
+              <div class="form-group col-sm-6 col-md-4">
+                <label i18n="Code|Code@@code" class="">Code</label>
+                <p>
+                  {{protocol.code | hyphen}}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="path finalLine"></div>
+          <div class="row" style="    text-align: right;padding: 23px 0;">
+            <div class="col-md-12">
+              <button type="button" class="btn btn-default text-center backActionButton" (click)="cancelProtocolView($event)"
+                i18n="Back button|Back@@back">
+                Back
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Protocol view mode ends here-->
+    </div>
+  </div>
+</div>
+
+<!-- Loader image -->
+<div *ngIf="showLoaderImage" class="col-lg-12 loaderImageStyle" style="margin-left:0%; margin-top:0%;margin-bottom:0%;"
+  align="center">
+  <img src="/assets/img/dashboard/ProgressLoader.gif" height="auto" width="50%" alt="Loading........">
+</div>
+<app-modal-notification (modelNotificationWarning)="formResetConfirm()" (modelNotificationSuccess)="redirectTo()">
+</app-modal-notification>

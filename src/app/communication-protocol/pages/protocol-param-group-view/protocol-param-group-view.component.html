@@ -1,0 +1,149 @@
+<div *ngIf="paramGroupListView">
+  <!-- <div class="header_Underline"></div> -->
+  <div class="h-100">
+    <div class="rowBox p-10 custom-rounded-bottom rowBoxFirstLevelHeight">
+      <!-- begin nav-tabs -->
+      <ngb-tabset type="pills" (tabChange)="getParamGroupByParamLevel($event.nextId)">
+        <ngb-tab id="CH">
+          <ng-template ngbTabTitle>
+            <div i18n="Tab|Channel@@channel">
+              Channel</div>
+          </ng-template>
+          <ng-template ngbTabContent>
+          </ng-template>
+        </ngb-tab>
+        <ngb-tab id="NC">
+          <ng-template ngbTabTitle>
+            <div i18n="Tab|Node Component@@nodeComponent">Node
+              Component</div>
+          </ng-template>
+          <ng-template ngbTabContent>
+          </ng-template>
+        </ngb-tab>
+        <ngb-tab id="NCDH">
+          <ng-template ngbTabTitle>
+            <div i18n="Tab|Node Component Data Handler@@nCDataModel">NC
+              Data Handler</div>
+          </ng-template>
+          <ng-template ngbTabContent>
+          </ng-template>
+        </ngb-tab>
+      </ngb-tabset>
+      <!-- end nav-tabs -->
+      <div>
+        <div class="rowBox p-10 custom-rounded-bottom">
+          <div class="container mat-elevation-z8 panel panel-inverse mb-0" style="position: relative">
+            <app-panel-user i18n-name="Panel header|List of Parameter Groups@@listOfParameterGroups" name="List of Parameter Groups: {{protocolDisplayName}}"
+              #panelHeader (refreshTableList)="refreshTableListFunction();panelHeader.setTableDasourceAsDefault(this.dataSource)" (scrollBarDirective)="onPaginateViewScrollToTop()">
+
+              <a backButton href="javascript:;" i18n="Back button|Back to Data Protocol@@backToDataProtocol" matTooltip="Back to Protocol"
+       class="btn btn-xs btn-icon btn-circle btn-default backButton" (click)="backToProtocol()">
+       <i class="fa fa-angle-left" aria-hidden="true"></i>
+     </a>
+              <!-- Input field for search -->
+              <input searchfield style="display: none;" id="filter" class="form-control m-input ml-2"
+                (keyup)="panelHeader.applyFilter($event.target.value, dataSource)" i18n-placeholder="Search|Search placeholder@@search" matInput placeholder="Search.." />
+
+              <!-- Search button -->
+              <a searchButton href="javascript:;" i18n-matTooltip="Search button|Click to Search@@ClickToSearch" matTooltip="Click to Search"
+                class="btn btn-xs btn-icon btn-circle btn-default" (click)="panelHeader.searchButton(this.dataSource)">
+                <i class="fa fa-search"></i>
+              </a>
+              <!-- Add New button -->
+              <a addNewButton routerLink="protocol-param-group-form" matTooltip="Click to Add New"
+                class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-expand"
+                (click)="setParamGroupLevel()" i18n-matTooltip="AddNew button tooltip|Click to Add New@@addNew">
+                <i class="fa fa-plus"></i>
+              </a>  
+              <div id="protocol-group-view" class="position-relative">
+                <div class="ps position-relative" [ngClass]="{'secondLeveltabWithInputFiledTable':dataSource.filteredData.length!=0}" appScrollbarDirective *ngIf="dataSource && dataSource.data.length">
+                  <ng-container *ngTemplateOutlet="matTable"></ng-container>
+                </div>
+          
+                <div class="table-responsive" *ngIf="!dataSource || !dataSource.data.length">
+                  <ng-container *ngTemplateOutlet="matTable"></ng-container>
+                </div>
+                <!-- Loader image -->
+                <div *ngIf="showLoaderImage" class="col-lg-12" style="margin-left:0%; margin-top:0%;margin-bottom:0%;"
+                  align="center">
+                  <img src="/assets/img/dashboard/ProgressLoader.gif" height="auto" width="50%" alt="Loading........">
+                </div>
+  
+                <h3 i18n="No records found text|No records found@@noRecordsFound" *ngIf="((dataSource && !dataSource.data.length) || dataSource.filteredData.length==0 ) && !showLoaderImage"
+                  class="text-center noRecordsFound">
+                  No records found!
+                </h3>
+                <ng-container>
+                  <app-mat-table-paginator [dataSource]="this.dataSource" #myPaginatorChildComponent (paginator)="matTablePaginator($event)"
+                  (scrollBarDirective)="onPaginateViewScrollToTop()"></app-mat-table-paginator>
+                  <!-- <mat-paginator [hidden]="dataSource && !dataSource.data.length" #myPaginator
+                    [length]="dataSource && dataSource.data.length" [pageSize]="pageSize"
+                    [pageSizeOptions]="[100, 500, 1000, 5000]" showFirstLastButtons>
+                  </mat-paginator> -->
+                </ng-container>
+                <!-- <mat-paginator [hidden]='NoRecordsFound' #myPaginator [length]="dataSource && dataSource.data.length"
+                  [pageSize]="pageSize" [pageSizeOptions]="[100, 500, 1000, 5000]" showFirstLastButtons>
+                </mat-paginator> -->
+              </div>
+              <ng-template #matTable>
+                <table mat-table [dataSource]="dataSource" class="table table-striped table-bordered" matSort>
+                  <!-- <ng-container style="display: none" matColumnDef="id">
+                    <th i18n="@@Id" mat-header-cell *matHeaderCellDef mat-sort-header style="display: none">Id</th>
+                    <td mat-cell style="display: none" *matCellDef="let element; let i = index;">{{element.id}} </td>
+                  </ng-container> -->
+                  <ng-container matColumnDef="sNo">
+                    <th style="text-align: left" i18n="Table id|Sno@@sNo" mat-header-cell *matHeaderCellDef> S.No. </th>
+                    <td style="text-align: left" mat-cell *matCellDef="let element; let i = index;">
+                      {{ (i+1) + (myPaginator.pageIndex * myPaginator.pageSize) }}</td>
+                  </ng-container>
+                  <ng-container matColumnDef="name">
+                    <th i18n="Table|Name@@name" mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+                    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="displayOrder">
+                    <th i18n="Table|Display Order@@displayOrder" mat-header-cell *matHeaderCellDef mat-sort-header> Display Order </th>
+                    <td style="text-align: left" mat-cell *matCellDef="let element"> {{element.displayOrder}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="status">
+                    <th i18n="Table|Status@@status" mat-header-cell *matHeaderCellDef> Status </th>
+                    <td mat-cell *matCellDef="let element"> {{element.status}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="edit" style="width: 300px;">
+                    <th style="text-align: left" i18n="Table|Action@@action" mat-header-cell *matHeaderCellDef> Action </th>
+                    <td style="text-align: left" mat-cell *matCellDef="let element">
+                      <a class="" routerLink="protocol-param-group-form" (click)="viewParamGroup(element.id)">
+                        <i class="fas fa-md fa-fw m-r-10 fa-eye" alt="view" i18n-matTooltip="View button|Click to View tooltip@@clickToView"
+                          matTooltip="Click to View"></i>
+                      </a>
+                      <a class="" routerLink="protocol-param-group-form" (click)="updateParamGroup(element.id)">
+                        <i class="fas fa-md fa-fw m-r-10 fa-edit" alt="edit" i18n-matTooltip="Edit button|Click to Edit tooltip@@clickToEdit"
+                          matTooltip="Click to Edit"></i>
+                      </a>
+                      <a class="" (click)="showManageParameter(element.id)">
+                        <i class="fas fa-md fa-fw m-r-10 fa-share-square" alt="Manage Param"
+                          i18n-matTooltip=" Manage Parameter button|Click to Manage Parameter@@clickToManageParameter" matTooltip="Click to Manage Parameter"></i>
+                      </a>
+                      <a class="" (click)="deleteProtocolParamGroup(element.id);">
+                        <i class="fas fa-md fa-fw m-r-10 fa-trash-alt" alt="delete" i18n-matTooltip="Delete button|Click to Delete tooltip@@clickToDelete"
+                          matTooltip="Click to Delete"></i>
+                      </a>
+                    </td>
+                  </ng-container>
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+              </ng-template>           
+            </app-panel-user>
+           
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- Global modal notification component selector for cancel and final save form-->
+<app-modal-notification (modelNotificationSuccess)="redirectTo()" (modelNotificationDanger)="confirmDelete();">
+</app-modal-notification>

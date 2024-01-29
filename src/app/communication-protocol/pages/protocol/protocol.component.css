@@ -1,0 +1,32 @@
+/* ul.nav li {
+    min-width: 100px;
+    border-radius: 5px;
+} 
+ul.nav-pills .nav-link, .nav-pills>li>a {
+    border-radius: 5px;
+    padding: 5px 15px;
+}
+
+.nav-pills .nav-link {
+    font-size: 13px;
+}
+
+.panel-heading {
+    padding: 5px 10px;
+}
+
+table.table>tbody>tr>td, table.table>tbody>tr>th, table.table>tfoot>tr>td, table.table>tfoot>tr>th, table.table>thead>tr>td, table.table>thead>tr>th {
+    padding: 5px 8px!important;
+}
+.heightCal {
+    height: calc(100vh - 150px);
+}
+.secondLevelBoxHeight{
+    height: calc(100vh - 210px);
+}
+
+
+.mat-cell, .mat-footer-cell, .table tbody tr td {
+    padding: 5px 8px!important;
+}
+*/

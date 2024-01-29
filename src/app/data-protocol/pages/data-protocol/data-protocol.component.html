@@ -1,0 +1,57 @@
+<script>
+  $(document).ready(function () {
+    $("#myTab li:eq(1) a").tab('show');
+  })
+</script>
+
+<!-- begin page-header -->
+<h1 i18n="Data Protocol Configuration header|Data Protocol Configuration@@dataProtocolConfiguration" class="page-header">Data Protocol Configuration</h1>
+<!-- end page-header -->
+<div class="header_Underline"></div>
+<!-- begin row -->
+<div class="row">
+  <!-- begin col-6 -->
+  <div class="col-lg-12">
+    <!-- begin nav-tabs -->
+    <ngb-tabset type="pills" (tabChange)="beforeChange($event)">
+      <ngb-tab id="dataProtocol">
+        <ng-template ngbTabTitle class="hidden">
+          <span i18n="Tab|Data Protocol@@dataProtocol" class="d-sm-none">Data Protocol</span>
+          <span i18n="Tab|Data Protocol@@DataProtocol" class="d-sm-block d-none">Data Protocol</span>
+        </ng-template>
+        <ng-template ngbTabContent>
+          <div id="dataProtocolView" class="rowBox p-10 custom-rounded-bottom rowBoxFirstLevelHeight">
+            <!-- <app-gateway-template-view (messageEvent)="receiveMessage($event)" (tabName)="tabNameMessage()"></app-gateway-template-view> -->
+            <app-data-protocol-list (messageEvent)="receiveMessage($event)" (tabName)="tabNameMessage()">
+            </app-data-protocol-list>
+          </div>
+        </ng-template>
+      </ngb-tab>
+      <ngb-tab id="DPTag">
+        <ng-template ngbTabTitle>
+          <span i18n="Tab|Tags@@tags" class="d-sm-none">Tags</span>
+          <span i18n="Tab|Tags@@tags" class="d-sm-block d-none">Tags</span>
+        </ng-template>
+        <ng-template ngbTabContent>
+          <div id="tagList" >
+            <app-data-protocol-tag-list (messageEvent)="receiveMessage($event)"> </app-data-protocol-tag-list>
+          </div>
+        </ng-template>
+      </ngb-tab>
+      <ngb-tab id="communication">
+        <ng-template ngbTabTitle>
+          <span i18n="Tab|Communication@@communication" class="d-sm-none">Communication</span>
+          <span i18n="Tab|Communication@@communication" class="d-sm-block d-none">Communication</span>
+        </ng-template>
+        <ng-template ngbTabContent>
+          <div id="communicationList" class="rowBox p-10 custom-rounded-bottom rowBoxFirstLevelHeight">
+            <app-data-protocol-communication></app-data-protocol-communication>
+          </div>
+        </ng-template>
+      </ngb-tab>
+    </ngb-tabset>
+    <!-- end nav-tabs -->
+  </div>
+  <!-- end col-6 -->
+</div>
+<!-- end row -->

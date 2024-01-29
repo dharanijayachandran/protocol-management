@@ -1,0 +1,59 @@
+<script>
+  $(document).ready(function () {
+    $("#myTab li:eq(1) a").tab('show');
+  })
+</script>
+
+<!-- begin page-header -->
+<h1 i18n="@@ProtocolMasterConfiguration" class="page-header">Protocol Configuration</h1>
+<!-- end page-header -->
+
+<div class="header_Underline"></div>
+<div class="protocolClass">
+  <ngb-tabset type="pills" (tabChange)="beforeChange($event)">
+    <ngb-tab id="ManageProtocol">
+      <ng-template ngbTabTitle class="hidden">
+        <span i18n="Tab|Protocol@@protocol" class="d-sm-none">Protocol</span>
+        <span i18n="Tab|Protocol@@protocol" class="d-sm-block d-none">Protocol</span>
+      </ng-template>
+      <ng-template ngbTabContent>
+        <div id="protocolView" class="rowBox p-10 custom-rounded-bottom rowBoxFirstLevelHeight">
+          <app-protocol-view  (tabName)="tabNameMessage()"></app-protocol-view>
+        </div>
+      </ng-template>
+    </ngb-tab>
+    <ngb-tab id="mngProtocolParamGroup">
+      <ng-template ngbTabTitle class="hidden">
+        <span i18n="Tab|Parameter Group@@parameterGroup" class="d-sm-none">Parameter Group</span>
+        <span i18n="Tab|Parameter Group@@parameterGroup" class="d-sm-block d-none">Parameter Group</span>
+      </ng-template>
+      <ng-template ngbTabContent>
+        <div id="protocolParamGroupList" class="custom-rounded-bottom rowBoxFirstLevelHeight">
+          <app-protocol-param-group-view  (tabName)="tabNameMessage()"></app-protocol-param-group-view>
+        </div>
+      </ng-template>
+    </ngb-tab>
+    <ngb-tab id="mngProtocolParam">
+      <ng-template ngbTabTitle class="hidden">
+        <span i18n="Tab|Parameter@@paramete" class="d-sm-none">Parameter</span>
+        <span i18n="Tab|Parameter@@paramete" class="d-sm-block d-none">Parameter</span>
+      </ng-template>
+      <ng-template ngbTabContent>
+        <div id="protocolParamList" class="rowBox p-10 custom-rounded-bottom rowBoxFirstLevelHeight">
+          <app-protocol-param-view  (tabName)="tabNameMessage()"></app-protocol-param-view>
+        </div>
+      </ng-template>
+    </ngb-tab>
+    <ngb-tab id="mngprotocolParamValueView">
+      <ng-template ngbTabTitle class="hidden">
+        <span i18n="Tab|Parameter Value@@parameterValue" class="d-sm-none">Parameter Value</span>
+        <span i18n="Tab|Parameter Value@@parameterValue" class="d-sm-block d-none">Parameter Value</span>
+      </ng-template>
+      <ng-template ngbTabContent>
+        <div id="protocolParamValueList" class="rowBox p-10 custom-rounded-bottom rowBoxFirstLevelHeight">
+          <app-protocol-param-value-view (tabName)="tabNameMessage()"></app-protocol-param-value-view>
+        </div>
+      </ng-template>
+    </ngb-tab>
+  </ngb-tabset>
+</div>

@@ -1,0 +1,9 @@
+.table-responsive {
+    min-height: 27vh;
+    max-height: 27vh;
+}
+
+.dh-table-responsive {
+    min-height: 51vh;
+    max-height: 51vh;
+}
